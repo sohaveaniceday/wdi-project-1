@@ -5,6 +5,18 @@ window.addEventListener('DOMContentLoaded', () => {
   const newGridDiv = []
   const players = []
   const directionArray = ['Vertical','Horizontal']
+  let user = null
+  let comp = null
+  let aircraftCarrier = null
+  let battleship = null
+  let submarine = null
+  let destroyer = null
+  let patrolBoat = null
+
+  //Declaring Global DOM Variables
+
+  const userGrid = document.querySelector('.user-grid')
+  const compGrid = document.querySelector('.comp-grid')
 
   //Contructors
 
@@ -18,9 +30,9 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   class Ship {
-    constructor(name, length, hp, maxHoriztonal, maxVertical) {
+    constructor(name, size, hp, maxHoriztonal, maxVertical) {
       this.name = name
-      this.length = length
+      this.size = size
       this.hp = hp
       this.maxHoriztonal = maxHoriztonal
       this.maxVertical = maxVertical
@@ -33,75 +45,79 @@ window.addEventListener('DOMContentLoaded', () => {
 
   }
 
-  //Player + Ship Construction + pushing into arrays
+  //Setup Function: Player + Ship Construction + pushing into arrays
 
-  const user = new Player('user')
-  const comp = new Player('comp')
+  function setup() {
 
-  const aircraftCarrier = new Ship('Aircraft Carrier', 5, 5, 6, 60)
-  const battleship = new Ship('Battleship', 4, 4, 7, 70)
-  const submarine = new Ship('Submarine', 3, 3, 8, 80)
-  const destroyer = new Ship('Destroyer', 3, 3, 8, 80)
-  const patrolBoat = new Ship('Patrol Boat', 2, 2, 9, 90)
+    user = new Player('user')
+    comp = new Player('comp')
 
-  user.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
-  comp.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
-  players.push(user, comp)
+    aircraftCarrier = new Ship('Aircraft Carrier', 5, 5, 6, 60)
+    battleship = new Ship('Battleship', 4, 4, 7, 70)
+    submarine = new Ship('Submarine', 3, 3, 8, 80)
+    destroyer = new Ship('Destroyer', 3, 3, 8, 80)
+    patrolBoat = new Ship('Patrol Boat', 2, 2, 9, 90)
 
-  console.log(players)
+    user.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
+    comp.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
+    players.push(user, comp)
 
-  //Declaring DOM Variables
+    console.log(players)
 
-  const userGrid = document.querySelector('.user-grid')
-  const compGrid = document.querySelector('.comp-grid')
+    buildGrid(userGrid, user)
+    buildGrid(compGrid, comp)
 
-  //Build User Grid
+  }
 
-  function buildUserGrid() {
-    for (let i = 1; i <= user.grid.length; i++) {
+  // Build Grid Function
+
+  function buildGrid(grid, player) {
+    for (let i = 1; i <= player.grid.length; i++) {
       newGridDiv[i] = document.createElement('div')
-      newGridDiv[i].setAttribute('class', 'gridDiv')
+      newGridDiv[i].setAttribute('class', `${player.type}-div grid-div`)
+      newGridDiv[i].setAttribute('data-id', i)
       newGridDiv[i].innerHTML = [i]
-      userGrid.appendChild(newGridDiv[i])
+      // newGridDiv[i].addEventListener('click', () => console.log(newGridDiv[i].classList))
+      newGridDiv[i].addEventListener('click', userSelection)
+      grid.appendChild(newGridDiv[i])
     }
   }
 
-  //Build Comp Grid
 
-  function buildCompGrid() {
-    for (let i = 1; i <= comp.grid.length; i++) {
-      newGridDiv[i] = document.createElement('div')
-      newGridDiv[i].setAttribute('class', 'gridDiv')
-      newGridDiv[i].innerHTML = [i]
-      compGrid.appendChild(newGridDiv[i])
+
+
+
+  // Boat Selections Functions
+
+  // function compSelection() {
+  //   for (let i = 0; i <= comp.ships.length; i++) {
+  //     const direction = directionArray[Math.floor(Math.random() * 2)]
+  //     if (direction === 'Vertical') {
+  //       console.log(comp.ships[i].maxVertical)
+  //       // comp.grid.splice(Math.floor(Math.random() * comp.ships[i].maxVertical), 1, comp.ships[i])
+  //     }
+  //   }
+  // }
+
+  function userSelection(e) {
+    if (e.target.classList.contains('user-div') && parseInt(e.target.dataset.id) <= aircraftCarrier.maxVertical) {
+      for (let i = 0; i < aircraftCarrier.size; i++) {
+        user.grid.splice(parseInt(e.target.dataset.id) + i * 10, 1, aircraftCarrier)
+
+        // console.log(typeof(parseInt(e.target.dataset.id)))
+      }
+      console.log(user.grid)
     }
   }
 
-  //Build Grid functions
-  
-  function buildCompGrid() {
-    for (let i = 1; i <= comp.grid.length; i++) {
-      newGridDiv[i] = document.createElement('div')
-      newGridDiv[i].setAttribute('class', 'gridDiv')
-      newGridDiv[i].innerHTML = [i]
-      compGrid.appendChild(newGridDiv[i])
-    }
-  }
 
-  // Boat Selections
 
-  function compSelction() {
-    const direction = directionArray[Math.floor(Math.random() * 2)]
-    if (direction === 'Vertical') {
-      compArray.splice(7, 1, aircraftCarrier)
-    }
-  }
 
-  //Function declarations
 
-  buildUserGrid()
-  buildCompGrid()
-  compSelction()
+
+  //Function calling
+
+  setup()
 
 
 
@@ -110,11 +126,9 @@ window.addEventListener('DOMContentLoaded', () => {
   //
   // userArray.splice(7, 1, ship1)
   //
-  // console.log(userArray[7])
 
   // new Game(number calls amount of div's in grid)
 
-  //Calling functions
 
 
 

@@ -10,7 +10,7 @@
   width: 500px;
   border: 1px solid black;
   margin: auto; }
-  .comp-grid .gridDiv {
+  .comp-grid .grid-div {
     flex-basis: 10%;
     display: flex;
     background: dodgerblue;
@@ -24,7 +24,7 @@
   width: 500px;
   border: 1px solid black;
   margin: auto; }
-  .user-grid .gridDiv {
+  .user-grid .grid-div {
     flex-basis: 10%;
     display: flex;
     background: dodgerblue;
