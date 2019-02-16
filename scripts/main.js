@@ -29,6 +29,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const userShips = document.querySelector('.user-ships')
   const compShips = document.querySelector('.comp-ships')
   const axis = document.querySelector('.axis')
+  const instructionsText = document.querySelector('.instructions-text')
 
   //Contructors
 
@@ -85,8 +86,6 @@ window.addEventListener('DOMContentLoaded', () => {
     addBoats(user, userShips)
     addBoats(comp, compShips)
 
-    axis.addEventListener('click', axisSelector)
-
   }
 
   // Build Grid and Ship Functions
@@ -114,6 +113,7 @@ window.addEventListener('DOMContentLoaded', () => {
       newShipDiv[i].addEventListener('click', userSelection)
       ships.appendChild(newShipDiv[i])
     }
+    axis.addEventListener('click', axisSelector)
   }
 
 
@@ -148,13 +148,25 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function positionSelection(e) {
     if (currentShip) {
-      user.ships.position = []
-      for (let i = 0; i < user.ships[currentShip].size; i++) {
-        user.ships.position.push(parseInt(e.target.dataset.id) + i)
+      user.ships[currentShip].position = []
+      if (axis.innerHTML === 'Horizontal') {
+        for (let i = 0; i < user.ships[currentShip].size; i++) {
+          user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i)
+        }
+        console.log(user.ships[currentShip])
+        changeInstructions()
       }
-      console.log(user.ships.position)
     }
   }
+
+  // Change Instructions Function
+
+  function changeInstructions() {
+    if (user.ships[0].position && user.ships[1].position && user.ships[2].position && user.ships[3].position && user.ships[4].position) {
+      instructionsText.innerHTML = 'Play Game'
+    }
+  }
+
 
   // ${user.ships[e.target.dataset.id]}
 
