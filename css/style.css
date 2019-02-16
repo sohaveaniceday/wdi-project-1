@@ -1,0 +1,35 @@
+* {
+  box-sizing: border-box; }
+
+.container {
+  display: flex; }
+
+.comp-grid {
+  display: inline-flex;
+  flex-wrap: wrap;
+  width: 500px;
+  border: 1px solid black;
+  margin: auto; }
+  .comp-grid .gridDiv {
+    flex-basis: 10%;
+    display: flex;
+    background: dodgerblue;
+    width: 50px;
+    height: 50px;
+    border: 1px solid black; }
+
+.user-grid {
+  display: inline-flex;
+  flex-wrap: wrap;
+  width: 500px;
+  border: 1px solid black;
+  margin: auto; }
+  .user-grid .gridDiv {
+    flex-basis: 10%;
+    display: flex;
+    background: dodgerblue;
+    width: 50px;
+    height: 50px;
+    border: 1px solid black; }
+
+/*# sourceMappingURL=style.css.map */
