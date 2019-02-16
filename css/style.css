@@ -4,27 +4,23 @@
 .container {
   display: flex; }
 
-.comp-grid {
-  display: inline-flex;
-  flex-wrap: wrap;
-  width: 500px;
-  border: 1px solid black;
-  margin: auto; }
-  .comp-grid .grid-div {
-    flex-basis: 10%;
-    display: flex;
-    background: dodgerblue;
-    width: 50px;
-    height: 50px;
-    border: 1px solid black; }
+.user-area {
+  display: flex;
+  padding: 50px;
+  flex-direction: column; }
 
-.user-grid {
+.comp-area {
+  display: flex;
+  padding: 30px;
+  flex-direction: column; }
+
+.grid {
   display: inline-flex;
   flex-wrap: wrap;
   width: 500px;
   border: 1px solid black;
   margin: auto; }
-  .user-grid .grid-div {
+  .grid .grid-div {
     flex-basis: 10%;
     display: flex;
     background: dodgerblue;

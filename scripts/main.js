@@ -3,20 +3,32 @@ window.addEventListener('DOMContentLoaded', () => {
   //Declaring Global Variabkes
 
   const newGridDiv = []
+  const newShipDiv = []
+
   const players = []
   const directionArray = ['Vertical','Horizontal']
+
   let user = null
   let comp = null
+
   let aircraftCarrier = null
   let battleship = null
   let submarine = null
   let destroyer = null
   let patrolBoat = null
 
+  let currentShip = null
+
+
+  // Storage
+
+
   //Declaring Global DOM Variables
 
   const userGrid = document.querySelector('.user-grid')
   const compGrid = document.querySelector('.comp-grid')
+  const userShips = document.querySelector('.user-ships')
+  const compShips = document.querySelector('.comp-ships')
 
   //Contructors
 
@@ -30,12 +42,15 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   class Ship {
-    constructor(name, size, hp, maxHoriztonal, maxVertical) {
-      this.name = name
+    constructor(type, id, size, hp, maxHoriztonal, maxVertical, image) {
+      this.type = type
+      this.id = id
       this.size = size
       this.hp = hp
       this.maxHoriztonal = maxHoriztonal
       this.maxVertical = maxVertical
+      this.image = image
+      this.position = []
       Ship.classification = 'ship'
     }
 
@@ -52,11 +67,11 @@ window.addEventListener('DOMContentLoaded', () => {
     user = new Player('user')
     comp = new Player('comp')
 
-    aircraftCarrier = new Ship('Aircraft Carrier', 5, 5, 6, 60)
-    battleship = new Ship('Battleship', 4, 4, 7, 70)
-    submarine = new Ship('Submarine', 3, 3, 8, 80)
-    destroyer = new Ship('Destroyer', 3, 3, 8, 80)
-    patrolBoat = new Ship('Patrol Boat', 2, 2, 9, 90)
+    aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier.png')
+    battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship.png')
+    submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine.png')
+    destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer.png')
+    patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat.png')
 
     user.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
     comp.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
@@ -67,9 +82,12 @@ window.addEventListener('DOMContentLoaded', () => {
     buildGrid(userGrid, user)
     buildGrid(compGrid, comp)
 
+    addBoats(user, userShips)
+    addBoats(comp, compShips)
+
   }
 
-  // Build Grid Function
+  // Build Grid and Ship Functions
 
   function buildGrid(grid, player) {
     for (let i = 1; i <= player.grid.length; i++) {
@@ -77,13 +95,24 @@ window.addEventListener('DOMContentLoaded', () => {
       newGridDiv[i].setAttribute('class', `${player.type}-div grid-div`)
       newGridDiv[i].setAttribute('data-id', i)
       newGridDiv[i].innerHTML = [i]
+      newGridDiv[i].setAttribute('onmouseover', '')
+      newGridDiv[i].setAttribute('onmouseout', '')
       // newGridDiv[i].addEventListener('click', () => console.log(newGridDiv[i].classList))
-      newGridDiv[i].addEventListener('click', userSelection)
+      newGridDiv[i].addEventListener('click', positionSelection)
       grid.appendChild(newGridDiv[i])
     }
   }
 
+  function addBoats(player, ships) {
 
+    for (let i = 0; i < player.ships.length; i++) {
+      newShipDiv[i] = document.createElement('div')
+      newShipDiv[i].setAttribute('class', 'ship-div')
+      newShipDiv[i].innerHTML = `<img src="${player.ships[i].image}" class="${player.type}-ship ${player.ships[i].id}" data-id="${i}">`
+      newShipDiv[i].addEventListener('click', userSelection)
+      ships.appendChild(newShipDiv[i])
+    }
+  }
 
 
 
@@ -100,15 +129,34 @@ window.addEventListener('DOMContentLoaded', () => {
   // }
 
   function userSelection(e) {
-    if (e.target.classList.contains('user-div') && parseInt(e.target.dataset.id) <= aircraftCarrier.maxVertical) {
-      for (let i = 0; i < aircraftCarrier.size; i++) {
-        user.grid.splice(parseInt(e.target.dataset.id) + i * 10, 1, aircraftCarrier)
-
-        // console.log(typeof(parseInt(e.target.dataset.id)))
-      }
-      console.log(user.grid)
+    if (e.target.classList.contains('user-ship')) {
+      // user.ships.position = []
+      console.log(e.target)
+      // userGrid.style.cursor = 'url(images/patrol-boat.png) 4 12, auto'
+      currentShip = e.target.dataset.id
     }
   }
+
+  function positionSelection(e) {
+    if (currentShip) {
+      user.ships.position = []
+      for (let i = 0; i < user.ships[currentShip].size; i++) {
+        user.ships.position.push(parseInt(e.target.dataset.id) + i)
+      }
+      console.log(user.ships.position)
+    }
+  }
+
+  // ${user.ships[e.target.dataset.id]}
+
+  // function positionSelection(e) {
+  //   if (e.target.classList.contains('user-div') && parseInt(e.target.dataset.id) <= aircraftCarrier.maxVertical) {
+  //     for (let i = 0; i < aircraftCarrier.size; i++) {
+  //       user.grid.splice(parseInt(e.target.dataset.id) + i * 10, 1, aircraftCarrier)
+  //     }
+  //     console.log(user.grid)
+  //   }
+  // }
 
 
 
