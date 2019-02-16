@@ -19,7 +19,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   let currentShip = null
 
-
   // Storage
 
 
@@ -29,6 +28,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const compGrid = document.querySelector('.comp-grid')
   const userShips = document.querySelector('.user-ships')
   const compShips = document.querySelector('.comp-ships')
+  const axis = document.querySelector('.axis')
 
   //Contructors
 
@@ -50,7 +50,7 @@ window.addEventListener('DOMContentLoaded', () => {
       this.maxHoriztonal = maxHoriztonal
       this.maxVertical = maxVertical
       this.image = image
-      this.position = []
+      this.position = null
       Ship.classification = 'ship'
     }
 
@@ -84,6 +84,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
     addBoats(user, userShips)
     addBoats(comp, compShips)
+
+    axis.addEventListener('click', axisSelector)
 
   }
 
@@ -128,9 +130,16 @@ window.addEventListener('DOMContentLoaded', () => {
   //   }
   // }
 
+  function axisSelector() {
+    if (axis.innerHTML === 'Vertical') {
+      axis.innerHTML = 'Horizontal'
+    } else {
+      axis.innerHTML = 'Vertical'
+    }
+  }
+
   function userSelection(e) {
     if (e.target.classList.contains('user-ship')) {
-      // user.ships.position = []
       console.log(e.target)
       // userGrid.style.cursor = 'url(images/patrol-boat.png) 4 12, auto'
       currentShip = e.target.dataset.id
