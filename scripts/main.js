@@ -19,9 +19,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
   let currentShip = null
 
-  // Storage
-
-
   //Declaring Global DOM Variables
 
   const userGrid = document.querySelector('.user-grid')
@@ -105,7 +102,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function addBoats(player, ships) {
-
     for (let i = 0; i < player.ships.length; i++) {
       newShipDiv[i] = document.createElement('div')
       newShipDiv[i].setAttribute('class', 'ship-div')
@@ -149,11 +145,13 @@ window.addEventListener('DOMContentLoaded', () => {
   function positionSelection(e) {
     if (currentShip) {
       user.ships[currentShip].position = []
-      if (axis.innerHTML === 'Horizontal') {
+      if (axis.innerHTML === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal) {
         for (let i = 0; i < user.ships[currentShip].size; i++) {
           user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i)
         }
         console.log(user.ships[currentShip])
+        console.log(e.target.dataset.id.substr(e.target.dataset.id.length - 1))
+        console.log(user.ships.position)
         changeInstructions()
       }
     }
@@ -197,6 +195,8 @@ window.addEventListener('DOMContentLoaded', () => {
   //
 
   // new Game(number calls amount of div's in grid)
+
+  //e.target.dataset.id.includes('6')
 
 
 
