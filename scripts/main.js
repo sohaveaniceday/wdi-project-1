@@ -34,7 +34,7 @@ window.addEventListener('DOMContentLoaded', () => {
     constructor(type) {
       this.type = type
       this.ships = []
-      this.grid = new Array(100)
+      this.grid = new Array(100).fill(null)
       Player.classification = 'player'
     }
   }
@@ -136,29 +136,41 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function userSelection(e) {
     if (e.target.classList.contains('user-ship')) {
-      console.log(e.target)
+      instructionsText.innerHTML = 'Place Your Boat'
+      // console.log(e.target)
       // userGrid.style.cursor = 'url(images/patrol-boat.png) 4 12, auto'
       currentShip = e.target.dataset.id
+      // changeInstructions()
     }
   }
 
+
   function positionSelection(e) {
     if (currentShip) {
-      if (axis.innerHTML === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal) {
+      if (axis.innerHTML === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal && user.grid[e.target.dataset.id] === null) {
         user.ships[currentShip].position = []
+        for (let i = 0; i < user.ships[currentShip].size; i++) {
+          user.grid.splice(user.grid.indexOf(user.ships[currentShip]), 1, null)
+        }
         for (let i = 0; i < user.ships[currentShip].size; i++) {
           user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i)
+          user.grid.splice(parseInt(e.target.dataset.id) + i, 1, user.ships[currentShip])
+          changeInstructions()
         }
-      } else if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical) {
+      } else if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical  && user.grid[e.target.dataset.id] === null) {
         user.ships[currentShip].position = []
         for (let i = 0; i < user.ships[currentShip].size; i++) {
-          user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i * 10)
+          user.grid.splice(user.grid.indexOf(user.ships[currentShip]), 1, null)
         }
+        for (let i = 0; i < user.ships[currentShip].size; i++) {
+          user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i * 10)
+          user.grid.splice(parseInt(e.target.dataset.id) + i * 10, 1, user.ships[currentShip])
+          changeInstructions()
+        }
+      } else {
+        instructionsText.innerHTML = 'Invalid Placement'
       }
-      console.log(user.ships[currentShip])
-      console.log(e.target.dataset.id.substr(e.target.dataset.id.length - 1))
-      console.log(user.ships[currentShip].position)
-      changeInstructions()
+      console.log(user.grid)
     }
   }
 
@@ -167,6 +179,8 @@ window.addEventListener('DOMContentLoaded', () => {
   function changeInstructions() {
     if (user.ships[0].position && user.ships[1].position && user.ships[2].position && user.ships[3].position && user.ships[4].position) {
       instructionsText.innerHTML = 'Play Game'
+    } else {
+      instructionsText.innerHTML = 'Pick Your Boat'
     }
   }
 
