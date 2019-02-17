@@ -144,16 +144,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function positionSelection(e) {
     if (currentShip) {
-      user.ships[currentShip].position = []
-      if (axis.innerHTML === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal) {
+      if (axis.innerHTML === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal) {
+        user.ships[currentShip].position = []
         for (let i = 0; i < user.ships[currentShip].size; i++) {
           user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i)
         }
-        console.log(user.ships[currentShip])
-        console.log(e.target.dataset.id.substr(e.target.dataset.id.length - 1))
-        console.log(user.ships.position)
-        changeInstructions()
+      } else if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical) {
+        user.ships[currentShip].position = []
+        for (let i = 0; i < user.ships[currentShip].size; i++) {
+          user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i * 10)
+        }
       }
+      console.log(user.ships[currentShip])
+      console.log(e.target.dataset.id.substr(e.target.dataset.id.length - 1))
+      console.log(user.ships[currentShip].position)
+      changeInstructions()
     }
   }
 
