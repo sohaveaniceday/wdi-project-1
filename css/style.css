@@ -26,5 +26,7 @@
     width: 30px;
     height: 30px;
     border: 1px solid black; }
+  .grid img {
+    position: absolute; }
 
 /*# sourceMappingURL=style.css.map */

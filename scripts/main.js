@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   class Ship {
-    constructor(type, id, size, hp, maxHoriztonal, maxVertical, image) {
+    constructor(type, id, size, hp, maxHoriztonal, maxVertical, image, vertImage) {
       this.type = type
       this.id = id
       this.size = size
@@ -48,6 +48,7 @@ window.addEventListener('DOMContentLoaded', () => {
       this.maxHoriztonal = maxHoriztonal
       this.maxVertical = maxVertical
       this.image = image
+      this.vertImage = vertImage
       this.position = null
       Ship.classification = 'ship'
     }
@@ -65,11 +66,11 @@ window.addEventListener('DOMContentLoaded', () => {
     user = new Player('user')
     comp = new Player('comp')
 
-    aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier.png')
-    battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship.png')
-    submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine.png')
-    destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer.png')
-    patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat.png')
+    aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier.png','images/aircraft-carrier-vert.png')
+    battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship.png','images/battleship-vert.png')
+    submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine.png','images/submarine-vert.png')
+    destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer.png','images/destroyer-vert.png')
+    patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat.png','images/patrol-boat-vert.png')
 
     user.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
     comp.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
@@ -91,10 +92,11 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let i = 1; i <= player.grid.length; i++) {
       newGridDiv[i] = document.createElement('div')
       newGridDiv[i].setAttribute('class', `${player.type}-div grid-div`)
+      newGridDiv[i].setAttribute('id', `${player.type}-${i}`)
       newGridDiv[i].setAttribute('data-id', i)
       newGridDiv[i].innerHTML = [i]
-      newGridDiv[i].setAttribute('onmouseover', '')
-      newGridDiv[i].setAttribute('onmouseout', '')
+      // newGridDiv[i].setAttribute('onmouseover', '')
+      // newGridDiv[i].setAttribute('onmouseout', '')
       // newGridDiv[i].addEventListener('click', () => console.log(newGridDiv[i].classList))
       newGridDiv[i].addEventListener('click', positionSelection)
       grid.appendChild(newGridDiv[i])
@@ -147,8 +149,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function positionSelection(e) {
     if (currentShip) {
-      if (axis.innerHTML === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal && user.grid[e.target.dataset.id] === null) {
+      if (axis.innerHTML === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal) {
         user.ships[currentShip].position = []
+        if (user.grid.indexOf(user.ships[currentShip]) !== -1) {
+          document.querySelector(`#user-${user.grid.indexOf(user.ships[currentShip])}`).innerHTML = `${user.grid.indexOf(user.ships[currentShip])}`
+        }
+        document.querySelector(`#user-${e.target.dataset.id}`).innerHTML = `<img src="${user.ships[currentShip].image}">`
         for (let i = 0; i < user.ships[currentShip].size; i++) {
           user.grid.splice(user.grid.indexOf(user.ships[currentShip]), 1, null)
         }
@@ -159,6 +165,10 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       } else if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical  && user.grid[e.target.dataset.id] === null) {
         user.ships[currentShip].position = []
+        if (user.grid.indexOf(user.ships[currentShip]) !== -1) {
+          document.querySelector(`#user-${user.grid.indexOf(user.ships[currentShip])}`).innerHTML = `${user.grid.indexOf(user.ships[currentShip])}`
+        }
+        document.querySelector(`#user-${e.target.dataset.id}`).innerHTML = `<img class='vert-image' src="${user.ships[currentShip].vertImage}">`
         for (let i = 0; i < user.ships[currentShip].size; i++) {
           user.grid.splice(user.grid.indexOf(user.ships[currentShip]), 1, null)
         }
@@ -171,6 +181,7 @@ window.addEventListener('DOMContentLoaded', () => {
         instructionsText.innerHTML = 'Invalid Placement'
       }
       console.log(user.grid)
+      console.log(e.target)
     }
   }
 
