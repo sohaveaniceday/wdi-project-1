@@ -177,6 +177,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function addImageToGrid(e, playerType, position) {
+    console.log(`#${playerType.type}-${e}`)
+    console.log(`<img src="images/${playerType.ships[currentShip].id}-${position}.png">`)
     document.querySelector(`#${playerType.type}-${e}`).innerHTML = `<img src="images/${playerType.ships[currentShip].id}-${position}.png">`
   }
 
@@ -240,26 +242,25 @@ window.addEventListener('DOMContentLoaded', () => {
       currentShip = i
       if (compDirection === 'Horizontal') {
         do {
-          compGridPosition = (Math.floor(Math.random() * 100)).toString()
+          compGridPosition = (Math.floor(Math.random() * 100) + 1).toString()
         }
         while (checkAcceptableHorizontal(compGridPosition, comp, compDirection) === undefined)
         addHoriztonalArrayData(compGridPosition, comp)
         addImageToGrid(compGridPosition, comp, compDirection)
-        // console.log(compGridPosition)
-        // console.log(user.ships[currentShip])
-        // console.log(comp.grid)
       } else if (compDirection === 'Vertical') {
         do {
-          compGridPosition = (Math.floor(Math.random() * 100)).toString()
+          compGridPosition = (Math.floor(Math.random() * 100) + 1).toString()
         }
         while (checkAcceptableVertical(compGridPosition, comp, compDirection) === undefined)
         addVerticalArrayData(compGridPosition, comp)
         addImageToGrid(compGridPosition, comp, compDirection)
-        // console.log(compGridPosition)
-        // console.log(user.ships[currentShip])
       }
     }
   }
+
+  // Game logic
+
+  
 
   //Function calling
 
