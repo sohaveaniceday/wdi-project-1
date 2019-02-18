@@ -121,26 +121,33 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function checkAcceptableHorizontal(e) {
-    if (direction === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal) {
+    if (direction === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal && checkHoriztonalOccupied(e)) {
       return true
     }
   }
 
-  // function checkHoriztonalOccupied(e) {
-  //   console.log(user.ships[currentShip].size)
-  //   for (let i = 0; i < user.ships[currentShip].size; i++) {
-  //     console.log(user.grid[parseInt(e.target.dataset.id) + i])
-  //     if (user.grid[parseInt(e.target.dataset.id) + i] === null) {
-  //       return false
-  //     }
-  //   }
-  //   return true
-  // }
+  function checkHoriztonalOccupied(e) {
+    for (let i = 0; i < user.ships[currentShip].size; i++) {
+      if(user.grid[parseInt(e.target.dataset.id) + i]) {
+        return false
+      }
+    }
+    return true
+  }
 
   function checkAcceptableVertical(e) {
-    if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical  && user.grid[e.target.dataset.id] === null) {
+    if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical  && user.grid[e.target.dataset.id] === null && checkVerticalOccupied(e)) {
       return true
     }
+  }
+
+  function checkVerticalOccupied(e) {
+    for (let i = 0; i < user.ships[currentShip].size; i++) {
+      if(user.grid[parseInt(e.target.dataset.id) + i * 10]) {
+        return false
+      }
+    }
+    return true
   }
 
   function clearCurrentObjectPositionArray() {
@@ -189,7 +196,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function positionSelection(e) {
     if (currentShip) {
-      changeInstructions()
+      instructionsText.innerHTML = 'Pick Your Boat'
+      checkHoriztonalOccupied(e)
       if (checkAcceptableHorizontal(e)) {
         clearCurrentObjectPositionArray()
         if (checkIfAlreadyOnMap()) {
@@ -212,6 +220,7 @@ window.addEventListener('DOMContentLoaded', () => {
       console.log(user.grid)
       console.log(e.target)
     }
+    changeInstructions()
   }
 
 
@@ -233,8 +242,6 @@ window.addEventListener('DOMContentLoaded', () => {
   function changeInstructions() {
     if (user.ships[0].position && user.ships[1].position && user.ships[2].position && user.ships[3].position && user.ships[4].position) {
       instructionsText.innerHTML = 'Play Game!'
-    } else {
-      instructionsText.innerHTML = 'Pick Your Boat'
     }
   }
 
