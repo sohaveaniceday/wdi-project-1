@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
   let comp = null
 
   let currentShip = null
-  let direction = directionArray[0]
+  let userDirection = directionArray[0]
   let compGridPosition = null
 
   //Declaring Global DOM Variables
@@ -37,15 +37,15 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   class Ship {
-    constructor(type, id, size, hp, maxHoriztonal, maxVertical, image, vertImage) {
+    constructor(type, id, size, hp, maxHoriztonal, maxVertical, horizontalImage, verticalImage) {
       this.type = type
       this.id = id
       this.size = size
       this.hp = hp
       this.maxHoriztonal = maxHoriztonal
       this.maxVertical = maxVertical
-      this.image = image
-      this.vertImage = vertImage
+      this.horiztonalImage = horizontalImage
+      this.verticalImage = verticalImage
       this.position = null
       Ship.classification = 'ship'
     }
@@ -61,11 +61,11 @@ window.addEventListener('DOMContentLoaded', () => {
     user = new Player('user')
     comp = new Player('comp')
 
-    const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier.png','images/aircraft-carrier-vert.png')
-    const battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship.png','images/battleship-vert.png')
-    const submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine.png','images/submarine-vert.png')
-    const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer.png','images/destroyer-vert.png')
-    const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat.png','images/patrol-boat-vert.png')
+    const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier-horizontal.png','images/aircraft-carrier-vertical.png')
+    const battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship-horizontal.png','images/battleship-vertical.png')
+    const submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine-horizontal.png','images/submarine-vertical.png')
+    const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer-horizontal.png','images/destroyer-vertical.png')
+    const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat-horizontal.png','images/patrol-boat-vertical.png')
 
     user.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
     comp.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
@@ -96,7 +96,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < player.ships.length; i++) {
       newShipDiv[i] = document.createElement('div')
       newShipDiv[i].setAttribute('class', 'ship-div')
-      newShipDiv[i].innerHTML = `<img src="${player.ships[i].image}" class="${player.type}-ship ${player.ships[i].id}" data-id="${i}">`
+      newShipDiv[i].innerHTML = `<img src="${player.ships[i].horiztonalImage}" class="${player.type}-ship ${player.ships[i].id}" data-id="${i}">`
       newShipDiv[i].addEventListener('click', userSelection)
       ships.appendChild(newShipDiv[i])
     }
@@ -108,89 +108,85 @@ window.addEventListener('DOMContentLoaded', () => {
   function axisSelector() {
     if (axis.innerHTML === 'Vertical') {
       axis.innerHTML = 'Horizontal'
-      direction = directionArray[0]
+      userDirection = directionArray[0]
     } else {
       axis.innerHTML = 'Vertical'
-      direction = directionArray[1]
+      userDirection = directionArray[1]
     }
   }
 
   function userSelection(e) {
     if (e.target.classList.contains('user-ship')) {
-      instructionsText.innerHTML = 'Place Your Boat'
       currentShip = e.target.dataset.id
+      instructionsText.innerHTML = `Place Your ${user.ships[currentShip].type}`
     }
   }
 
-  function checkAcceptableHorizontal(e) {
-    if (direction === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal && checkHoriztonalOccupied(e)) {
+  function checkAcceptableHorizontal(e, playerType, direction) {
+    if (direction === 'Horizontal' && e.substr(e.length - 1) !== '0' && e.substr(e.length - 1) <= playerType.ships[currentShip].maxHoriztonal && checkHoriztonalOccupied(e, playerType)) {
       return true
     }
   }
 
-  function checkHoriztonalOccupied(e) {
-    for (let i = 0; i < user.ships[currentShip].size; i++) {
-      if(user.grid[parseInt(e.target.dataset.id) + i]) {
+  function checkHoriztonalOccupied(e, playerType) {
+    for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+      if(playerType.grid[parseInt(e) + i]) {
         return false
       }
     }
     return true
   }
 
-  function checkAcceptableVertical(e) {
-    if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical && checkVerticalOccupied(e)) {
+  function checkAcceptableVertical(e, playerType, direction) {
+    if (direction === 'Vertical' && e <= playerType.ships[currentShip].maxVertical && checkVerticalOccupied(e, playerType)) {
       return true
     }
   }
 
-  function checkVerticalOccupied(e) {
-    for (let i = 0; i < user.ships[currentShip].size; i++) {
-      if(user.grid[parseInt(e.target.dataset.id) + i * 10]) {
+  function checkVerticalOccupied(e, playerType) {
+    for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+      if(playerType.grid[parseInt(e) + i * 10]) {
         return false
       }
     }
     return true
   }
 
-  function clearCurrentObjectPositionArray() {
-    user.ships[currentShip].position = []
+  function clearCurrentObjectPositionArray(playerType) {
+    playerType.ships[currentShip].position = []
   }
 
-  function checkIfAlreadyOnMap() {
-    if (user.grid.indexOf(user.ships[currentShip]) !== -1) {
+  function checkIfAlreadyOnMap(playerType) {
+    if (playerType.grid.indexOf(playerType.ships[currentShip]) !== -1) {
       return true
     }
   }
 
-  function clearImageAlreadyOnMap() {
-    document.querySelector(`#user-${user.grid.indexOf(user.ships[currentShip])}`).innerHTML = `${user.grid.indexOf(user.ships[currentShip])}`
+  function clearImageAlreadyOnMap(playerType) {
+    document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip])}`).innerHTML = `${playerType.grid.indexOf(playerType.ships[currentShip])}`
   }
 
-  function clearExistingArrayPosition() {
-    for (let i = 0; i < user.ships[currentShip].size; i++) {
-      user.grid.splice(user.grid.indexOf(user.ships[currentShip]), 1, null)
+  function clearExistingArrayPosition(playerType) {
+    for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+      playerType.grid.splice(playerType.grid.indexOf(playerType.ships[currentShip]), 1, null)
     }
   }
 
-  function addHorizontalImage(e) {
-    document.querySelector(`#user-${e.target.dataset.id}`).innerHTML = `<img src="${user.ships[currentShip].image}">`
+  function addImageToGrid(e, playerType, position) {
+    document.querySelector(`#${playerType.type}-${e}`).innerHTML = `<img src="images/${playerType.ships[currentShip].id}-${position}.png">`
   }
 
-  function addVerticalImage(e) {
-    document.querySelector(`#user-${e.target.dataset.id}`).innerHTML = `<img class='vert-image' src="${user.ships[currentShip].vertImage}">`
-  }
-
-  function addHoriztonalArrayData(e, player) {
-    for (let i = 0; i < player.ships[currentShip].size; i++) {
-      player.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i)
-      player.grid.splice(parseInt(e.target.dataset.id) + i, 1, player.ships[currentShip])
+  function addHoriztonalArrayData(e, playerType) {
+    for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+      playerType.ships[currentShip].position.push(parseInt(e) + i)
+      playerType.grid.splice(parseInt(e) + i, 1, playerType.ships[currentShip])
     }
   }
 
-  function addVerticalArrayData(e) {
-    for (let i = 0; i < user.ships[currentShip].size; i++) {
-      user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i * 10)
-      user.grid.splice(parseInt(e.target.dataset.id) + i * 10, 1, user.ships[currentShip])
+  function addVerticalArrayData(e, playerType) {
+    for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+      playerType.ships[currentShip].position.push(parseInt(e) + i * 10)
+      playerType.grid.splice(parseInt(e) + i * 10, 1, playerType.ships[currentShip])
     }
   }
 
@@ -199,22 +195,22 @@ window.addEventListener('DOMContentLoaded', () => {
   function positionSelection(e) {
     if (currentShip) {
       instructionsText.innerHTML = 'Pick Your Boat'
-      if (checkAcceptableHorizontal(e)) {
-        clearCurrentObjectPositionArray()
-        if (checkIfAlreadyOnMap()) {
-          clearImageAlreadyOnMap()
+      if (checkAcceptableHorizontal(e.target.dataset.id, user, userDirection)) {
+        clearCurrentObjectPositionArray(user)
+        if (checkIfAlreadyOnMap(user)) {
+          clearImageAlreadyOnMap(user)
         }
-        addHorizontalImage(e)
-        clearExistingArrayPosition()
-        addHoriztonalArrayData(e, user)
-      } else if (checkAcceptableVertical(e)) {
-        clearCurrentObjectPositionArray()
-        if (checkIfAlreadyOnMap()) {
-          clearImageAlreadyOnMap()
+        addImageToGrid(e.target.dataset.id, user, 'horizontal')
+        clearExistingArrayPosition(user)
+        addHoriztonalArrayData(e.target.dataset.id, user)
+      } else if (checkAcceptableVertical(e.target.dataset.id, user, userDirection)) {
+        clearCurrentObjectPositionArray(user)
+        if (checkIfAlreadyOnMap(user)) {
+          clearImageAlreadyOnMap(user)
         }
-        addVerticalImage(e)
-        clearExistingArrayPosition()
-        addVerticalArrayData(e)
+        addImageToGrid(e.target.dataset.id, user, 'vertical')
+        clearExistingArrayPosition(user)
+        addVerticalArrayData(e.target.dataset.id, user)
       } else {
         instructionsText.innerHTML = 'Invalid Placement'
       }
@@ -261,11 +257,11 @@ window.addEventListener('DOMContentLoaded', () => {
   //
   //   }
   // }
-
-
-
-  // Change Instructions Function
-
+  //
+  //
+  //
+  // // Change Instructions Function
+  //
   function changeInstructions() {
     if (user.ships[0].position && user.ships[1].position && user.ships[2].position && user.ships[3].position && user.ships[4].position) {
       instructionsText.innerHTML = 'Play Game!'
