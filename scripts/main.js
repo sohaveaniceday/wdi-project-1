@@ -13,6 +13,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   let currentShip = null
   let direction = directionArray[0]
+  let compGridPosition = null
 
   //Declaring Global DOM Variables
 
@@ -137,7 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function checkAcceptableVertical(e) {
-    if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical  && user.grid[e.target.dataset.id] === null && checkVerticalOccupied(e)) {
+    if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical && checkVerticalOccupied(e)) {
       return true
     }
   }
@@ -179,10 +180,10 @@ window.addEventListener('DOMContentLoaded', () => {
     document.querySelector(`#user-${e.target.dataset.id}`).innerHTML = `<img class='vert-image' src="${user.ships[currentShip].vertImage}">`
   }
 
-  function addHoriztonalArrayData(e) {
-    for (let i = 0; i < user.ships[currentShip].size; i++) {
-      user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i)
-      user.grid.splice(parseInt(e.target.dataset.id) + i, 1, user.ships[currentShip])
+  function addHoriztonalArrayData(e, player) {
+    for (let i = 0; i < player.ships[currentShip].size; i++) {
+      player.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i)
+      player.grid.splice(parseInt(e.target.dataset.id) + i, 1, player.ships[currentShip])
     }
   }
 
@@ -205,7 +206,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         addHorizontalImage(e)
         clearExistingArrayPosition()
-        addHoriztonalArrayData(e)
+        addHoriztonalArrayData(e, user)
       } else if (checkAcceptableVertical(e)) {
         clearCurrentObjectPositionArray()
         if (checkIfAlreadyOnMap()) {
@@ -218,6 +219,7 @@ window.addEventListener('DOMContentLoaded', () => {
         instructionsText.innerHTML = 'Invalid Placement'
       }
     }
+    console.log(user.grid)
     changeInstructions()
   }
 
@@ -225,19 +227,42 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-  function compSelection() {
-    for (let i = 0; i <= comp.ships.length; i++) {
-      const direction = directionArray[Math.floor(Math.random() * 2)]
+  // function compSelection() {
+  //   for (let i = 0; i < comp.ships.length; i++) {
+  //     const direction = directionArray[Math.floor(Math.random() * 2)]
+  //     if (direction === 'Vertical') {
+  //       compGridPosition = Math.floor(Math.random() * 100)
+  //       while (compGridPosition >= comp.ships[i].maxVertical) {
+  //         compGridPosition = Math.floor(Math.random() * 100)
+  //
+  //         //   compGridPosition = Math.floor(Math.random() * 100)
+  //         //   // console.log(parseInt(comp.ships[i].maxVertical))
+  //         //   // console.log(Math.floor(Math.random() * parseInt(comp.ships[i].maxVertical)))
+  //         //   // comp.grid.splice(Math.floor(Math.random() * comp.ships[i].maxVertical), 1, comp.ships[i])
+  //         //
+  //         //   // while(a > 5) {
+  //         //   //   console.log(`a is now ${a}`);
+  //         //   //   a--;
+  //         //   // }
+  //
+  //       }
+  //       currentShip = comp.ships[i]
+  //       addHoriztonalArrayData(compGridPosition)
+  //       console.log(comp.grid)
+  //
+  //     } else {
+  //
+  //       // console.log(Math.floor(Math.random() * 100))
+  //       // console.log(parseInt(comp.ships[i].maxHoriztonal))
+  //       // console.log(comp.ships[i].maxHoriztonal + 10)
+  //       // console.log(Math.floor(Math.random() * parseInt(comp.ships[i].maxHorizontal)))
+  //     }
+  //     // console.log(comp.ships[i].maxVertical)
+  //
+  //   }
+  // }
 
-      console.log(direction)
-      // if (direction === 'Vertical') {
-      //   console.log(comp.ships[i].maxVertical)
-      //   // comp.grid.splice(Math.floor(Math.random() * comp.ships[i].maxVertical), 1, comp.ships[i])
-      // }
-    }
-  }
 
-  compSelection()
 
   // Change Instructions Function
 
@@ -268,6 +293,8 @@ window.addEventListener('DOMContentLoaded', () => {
   //Function calling
 
   setup()
+  // compSelection()
+
 
 
 
