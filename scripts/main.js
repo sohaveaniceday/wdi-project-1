@@ -22,6 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const compShips = document.querySelector('.comp-ships')
   const axis = document.querySelector('.axis')
   const instructionsText = document.querySelector('.instructions-text')
+  const instructions = document.querySelector('.instructions')
 
   //Contructors
 
@@ -197,7 +198,6 @@ window.addEventListener('DOMContentLoaded', () => {
   function positionSelection(e) {
     if (currentShip) {
       instructionsText.innerHTML = 'Pick Your Boat'
-      checkHoriztonalOccupied(e)
       if (checkAcceptableHorizontal(e)) {
         clearCurrentObjectPositionArray()
         if (checkIfAlreadyOnMap()) {
@@ -217,8 +217,6 @@ window.addEventListener('DOMContentLoaded', () => {
       } else {
         instructionsText.innerHTML = 'Invalid Placement'
       }
-      console.log(user.grid)
-      console.log(e.target)
     }
     changeInstructions()
   }
@@ -227,15 +225,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // function compSelection() {
-  //   for (let i = 0; i <= comp.ships.length; i++) {
-  //     const direction = directionArray[Math.floor(Math.random() * 2)]
-  //     if (direction === 'Vertical') {
-  //       console.log(comp.ships[i].maxVertical)
-  //       // comp.grid.splice(Math.floor(Math.random() * comp.ships[i].maxVertical), 1, comp.ships[i])
-  //     }
-  //   }
-  // }
+  function compSelection() {
+    for (let i = 0; i <= comp.ships.length; i++) {
+      const direction = directionArray[Math.floor(Math.random() * 2)]
+
+      console.log(direction)
+      // if (direction === 'Vertical') {
+      //   console.log(comp.ships[i].maxVertical)
+      //   // comp.grid.splice(Math.floor(Math.random() * comp.ships[i].maxVertical), 1, comp.ships[i])
+      // }
+    }
+  }
+
+  compSelection()
 
   // Change Instructions Function
 
@@ -255,7 +257,6 @@ window.addEventListener('DOMContentLoaded', () => {
   //     for (let i = 0; i < aircraftCarrier.size; i++) {
   //       user.grid.splice(parseInt(e.target.dataset.id) + i * 10, 1, aircraftCarrier)
   //     }
-  //     console.log(user.grid)
   //   }
   // }
 
@@ -267,6 +268,7 @@ window.addEventListener('DOMContentLoaded', () => {
   //Function calling
 
   setup()
+
 
 
 
