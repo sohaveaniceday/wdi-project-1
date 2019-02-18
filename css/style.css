@@ -25,8 +25,12 @@
     background: dodgerblue;
     width: 30px;
     height: 30px;
-    border: 1px solid black; }
+    border: 1px solid black;
+    cursor: pointer; }
   .grid img {
     position: absolute; }
+
+img {
+  cursor: pointer; }
 
 /*# sourceMappingURL=style.css.map */

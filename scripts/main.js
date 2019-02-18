@@ -6,12 +6,13 @@ window.addEventListener('DOMContentLoaded', () => {
   const newShipDiv = []
 
   const players = []
-  const directionArray = ['Vertical','Horizontal']
+  const directionArray = ['Horizontal', 'Vertical']
 
   let user = null
   let comp = null
 
   let currentShip = null
+  let direction = directionArray[0]
 
   //Declaring Global DOM Variables
 
@@ -46,11 +47,9 @@ window.addEventListener('DOMContentLoaded', () => {
       this.position = null
       Ship.classification = 'ship'
     }
-
     hit() {
       this.hp--
     }
-
   }
 
   //Setup Function: Player + Ship Construction + pushing into arrays
@@ -70,11 +69,8 @@ window.addEventListener('DOMContentLoaded', () => {
     comp.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
     players.push(user, comp)
 
-    console.log(players)
-
     buildGrid(userGrid, user)
     buildGrid(compGrid, comp)
-
     addBoats(user, userShips)
     addBoats(comp, compShips)
 
@@ -89,9 +85,6 @@ window.addEventListener('DOMContentLoaded', () => {
       newGridDiv[i].setAttribute('id', `${player.type}-${i}`)
       newGridDiv[i].setAttribute('data-id', i)
       newGridDiv[i].innerHTML = [i]
-      // newGridDiv[i].setAttribute('onmouseover', '')
-      // newGridDiv[i].setAttribute('onmouseout', '')
-      // newGridDiv[i].addEventListener('click', () => console.log(newGridDiv[i].classList))
       newGridDiv[i].addEventListener('click', positionSelection)
       grid.appendChild(newGridDiv[i])
     }
@@ -108,9 +101,122 @@ window.addEventListener('DOMContentLoaded', () => {
     axis.addEventListener('click', axisSelector)
   }
 
-
-
   // Boat Selections Functions
+
+  function axisSelector() {
+    if (axis.innerHTML === 'Vertical') {
+      axis.innerHTML = 'Horizontal'
+      direction = directionArray[0]
+    } else {
+      axis.innerHTML = 'Vertical'
+      direction = directionArray[1]
+    }
+  }
+
+  function userSelection(e) {
+    if (e.target.classList.contains('user-ship')) {
+      instructionsText.innerHTML = 'Place Your Boat'
+      currentShip = e.target.dataset.id
+    }
+  }
+
+  function checkAcceptableHorizontal(e) {
+    if (direction === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal) {
+      return true
+    }
+  }
+
+  // function checkHoriztonalOccupied(e) {
+  //   console.log(user.ships[currentShip].size)
+  //   for (let i = 0; i < user.ships[currentShip].size; i++) {
+  //     console.log(user.grid[parseInt(e.target.dataset.id) + i])
+  //     if (user.grid[parseInt(e.target.dataset.id) + i] === null) {
+  //       return false
+  //     }
+  //   }
+  //   return true
+  // }
+
+  function checkAcceptableVertical(e) {
+    if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical  && user.grid[e.target.dataset.id] === null) {
+      return true
+    }
+  }
+
+  function clearCurrentObjectPositionArray() {
+    user.ships[currentShip].position = []
+  }
+
+  function checkIfAlreadyOnMap() {
+    if (user.grid.indexOf(user.ships[currentShip]) !== -1) {
+      return true
+    }
+  }
+
+  function clearImageAlreadyOnMap() {
+    document.querySelector(`#user-${user.grid.indexOf(user.ships[currentShip])}`).innerHTML = `${user.grid.indexOf(user.ships[currentShip])}`
+  }
+
+  function clearExistingArrayPosition() {
+    for (let i = 0; i < user.ships[currentShip].size; i++) {
+      user.grid.splice(user.grid.indexOf(user.ships[currentShip]), 1, null)
+    }
+  }
+
+  function addHorizontalImage(e) {
+    document.querySelector(`#user-${e.target.dataset.id}`).innerHTML = `<img src="${user.ships[currentShip].image}">`
+  }
+
+  function addVerticalImage(e) {
+    document.querySelector(`#user-${e.target.dataset.id}`).innerHTML = `<img class='vert-image' src="${user.ships[currentShip].vertImage}">`
+  }
+
+  function addHoriztonalArrayData(e) {
+    for (let i = 0; i < user.ships[currentShip].size; i++) {
+      user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i)
+      user.grid.splice(parseInt(e.target.dataset.id) + i, 1, user.ships[currentShip])
+    }
+  }
+
+  function addVerticalArrayData(e) {
+    for (let i = 0; i < user.ships[currentShip].size; i++) {
+      user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i * 10)
+      user.grid.splice(parseInt(e.target.dataset.id) + i * 10, 1, user.ships[currentShip])
+    }
+  }
+
+
+
+  function positionSelection(e) {
+    if (currentShip) {
+      changeInstructions()
+      if (checkAcceptableHorizontal(e)) {
+        clearCurrentObjectPositionArray()
+        if (checkIfAlreadyOnMap()) {
+          clearImageAlreadyOnMap()
+        }
+        addHorizontalImage(e)
+        clearExistingArrayPosition()
+        addHoriztonalArrayData(e)
+      } else if (checkAcceptableVertical(e)) {
+        clearCurrentObjectPositionArray()
+        if (checkIfAlreadyOnMap()) {
+          clearImageAlreadyOnMap()
+        }
+        addVerticalImage(e)
+        clearExistingArrayPosition()
+        addVerticalArrayData(e)
+      } else {
+        instructionsText.innerHTML = 'Invalid Placement'
+      }
+      console.log(user.grid)
+      console.log(e.target)
+    }
+  }
+
+
+
+
 
   // function compSelection() {
   //   for (let i = 0; i <= comp.ships.length; i++) {
@@ -122,60 +228,6 @@ window.addEventListener('DOMContentLoaded', () => {
   //   }
   // }
 
-  function axisSelector() {
-    if (axis.innerHTML === 'Vertical') {
-      axis.innerHTML = 'Horizontal'
-    } else {
-      axis.innerHTML = 'Vertical'
-    }
-  }
-
-  function userSelection(e) {
-    if (e.target.classList.contains('user-ship')) {
-      instructionsText.innerHTML = 'Place Your Boat'
-      currentShip = e.target.dataset.id
-    }
-  }
-
-
-  function positionSelection(e) {
-    if (currentShip) {
-      if (axis.innerHTML === 'Horizontal' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) !== '0' && e.target.dataset.id.substr(e.target.dataset.id.length - 1) <= user.ships[currentShip].maxHoriztonal) {
-        user.ships[currentShip].position = []
-        if (user.grid.indexOf(user.ships[currentShip]) !== -1) {
-          document.querySelector(`#user-${user.grid.indexOf(user.ships[currentShip])}`).innerHTML = `${user.grid.indexOf(user.ships[currentShip])}`
-        }
-        document.querySelector(`#user-${e.target.dataset.id}`).innerHTML = `<img src="${user.ships[currentShip].image}">`
-        for (let i = 0; i < user.ships[currentShip].size; i++) {
-          user.grid.splice(user.grid.indexOf(user.ships[currentShip]), 1, null)
-        }
-        for (let i = 0; i < user.ships[currentShip].size; i++) {
-          user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i)
-          user.grid.splice(parseInt(e.target.dataset.id) + i, 1, user.ships[currentShip])
-          changeInstructions()
-        }
-      } else if (axis.innerHTML === 'Vertical' && e.target.dataset.id <= user.ships[currentShip].maxVertical  && user.grid[e.target.dataset.id] === null) {
-        user.ships[currentShip].position = []
-        if (user.grid.indexOf(user.ships[currentShip]) !== -1) {
-          document.querySelector(`#user-${user.grid.indexOf(user.ships[currentShip])}`).innerHTML = `${user.grid.indexOf(user.ships[currentShip])}`
-        }
-        document.querySelector(`#user-${e.target.dataset.id}`).innerHTML = `<img class='vert-image' src="${user.ships[currentShip].vertImage}">`
-        for (let i = 0; i < user.ships[currentShip].size; i++) {
-          user.grid.splice(user.grid.indexOf(user.ships[currentShip]), 1, null)
-        }
-        for (let i = 0; i < user.ships[currentShip].size; i++) {
-          user.ships[currentShip].position.push(parseInt(e.target.dataset.id) + i * 10)
-          user.grid.splice(parseInt(e.target.dataset.id) + i * 10, 1, user.ships[currentShip])
-          changeInstructions()
-        }
-      } else {
-        instructionsText.innerHTML = 'Invalid Placement'
-      }
-      console.log(user.grid)
-      console.log(e.target)
-    }
-  }
-
   // Change Instructions Function
 
   function changeInstructions() {
@@ -185,6 +237,8 @@ window.addEventListener('DOMContentLoaded', () => {
       instructionsText.innerHTML = 'Pick Your Boat'
     }
   }
+
+
 
 
   // ${user.ships[e.target.dataset.id]}
