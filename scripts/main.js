@@ -46,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
       this.maxVertical = maxVertical
       this.horiztonalImage = horizontalImage
       this.verticalImage = verticalImage
-      this.position = null
+      this.position = []
       Ship.classification = 'ship'
     }
     hit() {
@@ -61,16 +61,20 @@ window.addEventListener('DOMContentLoaded', () => {
     user = new Player('user')
     comp = new Player('comp')
 
-    const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier-horizontal.png','images/aircraft-carrier-vertical.png')
-    const battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship-horizontal.png','images/battleship-vertical.png')
-    const submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine-horizontal.png','images/submarine-vertical.png')
-    const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer-horizontal.png','images/destroyer-vertical.png')
-    const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat-horizontal.png','images/patrol-boat-vertical.png')
-
-    user.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
-    comp.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
     players.push(user, comp)
 
+    function shipBuilding() {
+      for (let i = 0; i < players.length; i++) {
+        const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier-horizontal.png','images/aircraft-carrier-vertical.png')
+        const battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship-horizontal.png','images/battleship-vertical.png')
+        const submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine-horizontal.png','images/submarine-vertical.png')
+        const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer-horizontal.png','images/destroyer-vertical.png')
+        const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat-horizontal.png','images/patrol-boat-vertical.png')
+        players[i].ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
+      }
+    }
+
+    shipBuilding()
     buildGrid(userGrid, user)
     buildGrid(compGrid, comp)
     addBoats(user, userShips)
@@ -190,7 +194,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
+  // User Boat Selection Uber Function
 
   function positionSelection(e) {
     if (currentShip) {
@@ -215,97 +219,52 @@ window.addEventListener('DOMContentLoaded', () => {
         instructionsText.innerHTML = 'Invalid Placement'
       }
     }
-    console.log(user.grid)
+    console.log(user.ships[1].position.length)
     changeInstructions()
   }
 
 
-
-
-
-  // function compSelection() {
-  //   for (let i = 0; i < comp.ships.length; i++) {
-  //     const direction = directionArray[Math.floor(Math.random() * 2)]
-  //     if (direction === 'Vertical') {
-  //       compGridPosition = Math.floor(Math.random() * 100)
-  //       while (compGridPosition >= comp.ships[i].maxVertical) {
-  //         compGridPosition = Math.floor(Math.random() * 100)
-  //
-  //         //   compGridPosition = Math.floor(Math.random() * 100)
-  //         //   // console.log(parseInt(comp.ships[i].maxVertical))
-  //         //   // console.log(Math.floor(Math.random() * parseInt(comp.ships[i].maxVertical)))
-  //         //   // comp.grid.splice(Math.floor(Math.random() * comp.ships[i].maxVertical), 1, comp.ships[i])
-  //         //
-  //         //   // while(a > 5) {
-  //         //   //   console.log(`a is now ${a}`);
-  //         //   //   a--;
-  //         //   // }
-  //
-  //       }
-  //       currentShip = comp.ships[i]
-  //       addHoriztonalArrayData(compGridPosition)
-  //       console.log(comp.grid)
-  //
-  //     } else {
-  //
-  //       // console.log(Math.floor(Math.random() * 100))
-  //       // console.log(parseInt(comp.ships[i].maxHoriztonal))
-  //       // console.log(comp.ships[i].maxHoriztonal + 10)
-  //       // console.log(Math.floor(Math.random() * parseInt(comp.ships[i].maxHorizontal)))
-  //     }
-  //     // console.log(comp.ships[i].maxVertical)
-  //
-  //   }
-  // }
-  //
-  //
-  //
   // // Change Instructions Function
-  //
+
   function changeInstructions() {
-    if (user.ships[0].position && user.ships[1].position && user.ships[2].position && user.ships[3].position && user.ships[4].position) {
+    if (user.ships[0].position.length > 0 && user.ships[1].position.length > 0 && user.ships[2].position.length > 0 && user.ships[3].position.length > 0 && user.ships[4].position.length > 0) {
       instructionsText.innerHTML = 'Play Game!'
     }
   }
 
+  // Comp Boat Selection Uber Function
 
-
-
-  // ${user.ships[e.target.dataset.id]}
-
-  // function positionSelection(e) {
-  //   if (e.target.classList.contains('user-div') && parseInt(e.target.dataset.id) <= aircraftCarrier.maxVertical) {
-  //     for (let i = 0; i < aircraftCarrier.size; i++) {
-  //       user.grid.splice(parseInt(e.target.dataset.id) + i * 10, 1, aircraftCarrier)
-  //     }
-  //   }
-  // }
-
-
-
-
-
+  function compSelection() {
+    for (let i = 0; i < user.ships.length; i++) {
+      const compDirection = directionArray[Math.floor(Math.random() * 2)]
+      currentShip = i
+      if (compDirection === 'Horizontal') {
+        do {
+          compGridPosition = (Math.floor(Math.random() * 100)).toString()
+        }
+        while (checkAcceptableHorizontal(compGridPosition, comp, compDirection) === undefined)
+        addHoriztonalArrayData(compGridPosition, comp)
+        addImageToGrid(compGridPosition, comp, compDirection)
+        // console.log(compGridPosition)
+        // console.log(user.ships[currentShip])
+        // console.log(comp.grid)
+      } else if (compDirection === 'Vertical') {
+        do {
+          compGridPosition = (Math.floor(Math.random() * 100)).toString()
+        }
+        while (checkAcceptableVertical(compGridPosition, comp, compDirection) === undefined)
+        addVerticalArrayData(compGridPosition, comp)
+        addImageToGrid(compGridPosition, comp, compDirection)
+        // console.log(compGridPosition)
+        // console.log(user.ships[currentShip])
+      }
+    }
+  }
 
   //Function calling
 
   setup()
-  // compSelection()
-
-
-
-
-
-
-  // const ship1 = 'ship 1'
-  //
-  // userArray.splice(7, 1, ship1)
-  //
-
-  // new Game(number calls amount of div's in grid)
-
-  //e.target.dataset.id.includes('6')
-
-
+  compSelection()
 
 
 })
