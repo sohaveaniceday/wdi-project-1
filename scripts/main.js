@@ -11,12 +11,6 @@ window.addEventListener('DOMContentLoaded', () => {
   let user = null
   let comp = null
 
-  let aircraftCarrier = null
-  let battleship = null
-  let submarine = null
-  let destroyer = null
-  let patrolBoat = null
-
   let currentShip = null
 
   //Declaring Global DOM Variables
@@ -66,11 +60,11 @@ window.addEventListener('DOMContentLoaded', () => {
     user = new Player('user')
     comp = new Player('comp')
 
-    aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier.png','images/aircraft-carrier-vert.png')
-    battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship.png','images/battleship-vert.png')
-    submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine.png','images/submarine-vert.png')
-    destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer.png','images/destroyer-vert.png')
-    patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat.png','images/patrol-boat-vert.png')
+    const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier.png','images/aircraft-carrier-vert.png')
+    const battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship.png','images/battleship-vert.png')
+    const submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine.png','images/submarine-vert.png')
+    const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer.png','images/destroyer-vert.png')
+    const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat.png','images/patrol-boat-vert.png')
 
     user.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
     comp.ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
@@ -139,10 +133,7 @@ window.addEventListener('DOMContentLoaded', () => {
   function userSelection(e) {
     if (e.target.classList.contains('user-ship')) {
       instructionsText.innerHTML = 'Place Your Boat'
-      // console.log(e.target)
-      // userGrid.style.cursor = 'url(images/patrol-boat.png) 4 12, auto'
       currentShip = e.target.dataset.id
-      // changeInstructions()
     }
   }
 
@@ -189,7 +180,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function changeInstructions() {
     if (user.ships[0].position && user.ships[1].position && user.ships[2].position && user.ships[3].position && user.ships[4].position) {
-      instructionsText.innerHTML = 'Play Game'
+      instructionsText.innerHTML = 'Play Game!'
     } else {
       instructionsText.innerHTML = 'Pick Your Boat'
     }
