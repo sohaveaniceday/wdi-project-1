@@ -14,6 +14,17 @@ window.addEventListener('DOMContentLoaded', () => {
   let currentShip = null
   let userDirection = directionArray[0]
   let compGridPosition = null
+  let huntingMode = false
+  let successfulHit = null
+  let originalSuccessfulHit = null
+  const compGuessArray = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,101,102,103,104,105,106,107,108,109,110]
+  let huntingTally = 0
+  let compGuess = null
+  const huntingModeHorizontalArray = [1,-1]
+  const huntingModeVerticalArray = [10,-10]
+  let huntingDirection = null
+  let fixedHuntingDirection = null
+
 
   //Declaring Global DOM Variables
 
@@ -360,12 +371,33 @@ window.addEventListener('DOMContentLoaded', () => {
   function computerGuess() {
     compInstructions.innerHTML = 'Waiting'
     instructions.removeEventListener('click', computerGuess)
-    let compGuess = null
-    const compGuessArray = []
-    do {
-      compGuess = (Math.floor(Math.random() * 100) + 1)
+    if (huntingMode === true) {
+      do {
+        if (fixedHuntingDirection) {
+          if (fixedHuntingDirection === 'Horizontal') {
+            compGuess = successfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
+          } else {
+            compGuess = successfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
+          }
+        } else {
+          huntingDirection = directionArray[Math.floor(Math.random() * 2)]
+          if (huntingDirection === 'Horizontal') {
+            compGuess = successfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
+          } else {
+            compGuess = successfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
+          }
+        }
+      }  while (compGuessArray.includes(compGuess))
+    } else {
+      do {
+        compGuess = (Math.floor(Math.random() * 100) + 1)
+      }
+      while (compGuessArray.includes(compGuess))
     }
-    while (compGuessArray.includes(compGuess))
+    console.log(compGuess)
+    console.log(huntingMode)
+    console.log(`successful hit: ${successfulHit}`)
+    console.log(`hunting tally: ${huntingTally}`)
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
     userDiv[parseInt(compGuess) - 1].style.border = '1px solid white'
@@ -374,10 +406,21 @@ window.addEventListener('DOMContentLoaded', () => {
       const currentHitShip = user.grid[parseInt(compGuess)].numberInArray
       hittingShip(currentHitShip, user, parseInt(compGuess))
       console.log('hit')
-      console.log(compGuess)
+      huntingMode = true
+      successfulHit = compGuess
+      huntingTally += 1
+      if (huntingTally === 1) {
+        originalSuccessfulHit = compGuess
+      }
+      if (huntingTally > 1) {
+        fixedHuntingDirection = huntingDirection
+      }
       if (user.ships[currentHitShip].hp === 0) {
-        userInstructions.innerHTML = `The computer sunk your ${user.ships[currentHitShip].type}!`
+        userInstructions.innerHTML = `They sunk your ${user.ships[currentHitShip].type}!`
         shipDown(currentHitShip, user)
+        huntingMode = false
+        huntingTally = 0
+        fixedHuntingDirection = null
         if (user.totalHp === 0) {
           return gameOver(comp)
         }
@@ -386,7 +429,6 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       userInstructions.innerHTML = 'Miss!'
       console.log('miss')
-      console.log(compGuess)
     }
     playerTurn()
   }
