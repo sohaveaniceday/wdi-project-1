@@ -24,6 +24,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const axis = document.querySelector('.axis')
   const instructionsText = document.querySelector('.instructions-text')
   const instructions = document.querySelector('.instructions')
+  const compInstructions = document.querySelector('.comp-instructions')
 
   //Contructors
 
@@ -32,6 +33,7 @@ window.addEventListener('DOMContentLoaded', () => {
       this.type = type
       this.ships = []
       this.grid = new Array(100).fill(null)
+      this.totalHp = 17
       Player.classification = 'player'
     }
   }
@@ -189,13 +191,13 @@ window.addEventListener('DOMContentLoaded', () => {
   function addCompImageToGrid(e, playerType, position) {
     if (position === 'horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
-        // console.log(`#${playerType.type}-${parseInt(e) + i}`)
         document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).style.background = 'black'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
       }
     } else {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
-        // console.log(`#${playerType.type}-${parseInt(e) + i}`)
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).style.background = 'black'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
       }
     }
   }
@@ -286,29 +288,38 @@ window.addEventListener('DOMContentLoaded', () => {
   // Game logic
 
   function playerTurn() {
-    instructions.removeEventListener('click', playerTurn)
-    instructionsText.innerHTML = 'Select Enemy Square'
+    compInstructions.innerHTML = 'Waiting'
+    axis.innerHTML = 'Waiting'
     const userDiv = document.querySelectorAll('.user-div')
     userDiv.forEach(div => div.removeEventListener('click', positionSelection))
-    const compDiv = document.querySelectorAll('.comp-active-div')
-    compDiv.forEach(div => div.addEventListener('click', playerGuess))
+    instructions.removeEventListener('click', playerTurn)
+    instructionsText.innerHTML = 'Select Enemy Square'
+    const compActiveDiv = document.querySelectorAll('.comp-active-div')
+    compActiveDiv.forEach(div => div.addEventListener('click', playerGuess))
   }
 
   function playerGuess(e) {
-    console.log(e.target.dataset.id)
-    // const compDiv = document.querySelectorAll('.comp-active-div')
-    // compDiv.forEach(div => div.removeEventListener('click', playerGuess))
-    // // compDiv[parseInt(e.target.dataset.id)].setAttribute('class', 'comp-div comp-dead-div grid-div')
-    // if (e.target.dataset.shipid !== undefined) {
-    //   instructionsText.innerHTML = 'Hit!'
-    //   comp.ships[parseInt(e.target.dataset.shipid)].hp -= 1
-    //   if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
-    //     instructionsText.innerHTML = 'You sunk my battleship!'
-    //   }
-    // } else {
-    //   instructionsText.innerHTML = 'Miss!'
-    // }
-    // instructions.addEventListener('click', playerTurn)
+    const compDiv = document.querySelectorAll('.comp-div')
+    compDiv.forEach(div => div.removeEventListener('click', playerGuess))
+    compDiv[parseInt(e.target.dataset.id) - 1].setAttribute('class', 'comp-div comp-dead-div grid-div')
+    compDiv[parseInt(e.target.dataset.id) - 1].style.border = '1px solid white'
+    if (e.target.dataset.shipid !== undefined) {
+      compInstructions.innerHTML = 'Hit!'
+      comp.ships[parseInt(e.target.dataset.shipid)].hp -= 1
+      comp.totalHp -= 1
+      console.log(comp.totalHp)
+      if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
+        compInstructions.innerHTML = 'You sunk their battleship!'
+      }
+    } else {
+      compInstructions.innerHTML = 'Miss!'
+    }
+    if (comp.totalHp === 0) {
+      instructionsText.innerHTML = 'You Win the Game!'
+    } else {
+      instructionsText.innerHTML = 'Computer\'s turn'
+      instructions.addEventListener('click', playerTurn)
+    }
   }
 
   //Function calling
