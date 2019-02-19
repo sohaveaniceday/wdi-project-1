@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const compGrid = document.querySelector('.comp-grid')
   const userShips = document.querySelector('.user-ships')
   const compShips = document.querySelector('.comp-ships')
-  const axis = document.querySelector('.axis')
+  const userInstructions = document.querySelector('.axis')
   const instructionsText = document.querySelector('.instructions-text')
   const instructions = document.querySelector('.instructions')
   const compInstructions = document.querySelector('.comp-instructions')
@@ -29,17 +29,18 @@ window.addEventListener('DOMContentLoaded', () => {
   //Contructors
 
   class Player {
-    constructor(type) {
+    constructor(type, referenceName) {
       this.type = type
       this.ships = []
       this.grid = new Array(100).fill(null)
       this.totalHp = 17
+      this.referenceName = referenceName
       Player.classification = 'player'
     }
   }
 
   class Ship {
-    constructor(type, id, size, hp, maxHoriztonal, maxVertical, horizontalImage, verticalImage) {
+    constructor(type, id, size, hp, maxHoriztonal, maxVertical, horizontalImage, verticalImage, numberInArray) {
       this.type = type
       this.id = id
       this.size = size
@@ -49,6 +50,8 @@ window.addEventListener('DOMContentLoaded', () => {
       this.horiztonalImage = horizontalImage
       this.verticalImage = verticalImage
       this.position = []
+      this.axis = null
+      this.numberInArray = numberInArray
       Ship.classification = 'ship'
     }
     hit(e) {
@@ -60,18 +63,18 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function setup() {
 
-    user = new Player('user')
-    comp = new Player('comp')
+    user = new Player('user', 'You')
+    comp = new Player('comp', 'The Computer')
 
     players.push(user, comp)
 
     function shipBuilding() {
       for (let i = 0; i < players.length; i++) {
-        const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier-horizontal.png','images/aircraft-carrier-vertical.png')
-        const battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship-horizontal.png','images/battleship-vertical.png')
-        const submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine-horizontal.png','images/submarine-vertical.png')
-        const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer-horizontal.png','images/destroyer-vertical.png')
-        const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat-horizontal.png','images/patrol-boat-vertical.png')
+        const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier-horizontal.png','images/aircraft-carrier-vertical.png', 0)
+        const battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship-horizontal.png','images/battleship-vertical.png', 1)
+        const submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine-horizontal.png','images/submarine-vertical.png', 2)
+        const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer-horizontal.png','images/destroyer-vertical.png', 3)
+        const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat-horizontal.png','images/patrol-boat-vertical.png', 4)
         players[i].ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
       }
     }
@@ -107,17 +110,17 @@ window.addEventListener('DOMContentLoaded', () => {
       newShipDiv[i].addEventListener('click', userSelection)
       ships.appendChild(newShipDiv[i])
     }
-    axis.addEventListener('click', axisSelector)
+    userInstructions.addEventListener('click', axisSelector)
   }
 
   // Boat Selections Functions
 
   function axisSelector() {
-    if (axis.innerHTML === 'Vertical') {
-      axis.innerHTML = 'Horizontal'
+    if (userInstructions.innerHTML === 'Vertical') {
+      userInstructions.innerHTML = 'Horizontal'
       userDirection = directionArray[0]
     } else {
-      axis.innerHTML = 'Vertical'
+      userInstructions.innerHTML = 'Vertical'
       userDirection = directionArray[1]
     }
   }
@@ -194,11 +197,13 @@ window.addEventListener('DOMContentLoaded', () => {
         document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
       }
+      playerType.ships[parseInt(currentShip)].axis = 'horizontal'
     } else {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
       }
+      playerType.ships[parseInt(currentShip)].axis = 'vertical'
     }
   }
 
@@ -209,6 +214,7 @@ window.addEventListener('DOMContentLoaded', () => {
       playerType.grid.splice(parseInt(e) + i, 1, playerType.ships[currentShip])
       document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
     }
+    playerType.ships[parseInt(currentShip)].axis = 'horizontal'
   }
 
   function addVerticalArrayData(e, playerType) {
@@ -217,6 +223,7 @@ window.addEventListener('DOMContentLoaded', () => {
       playerType.grid.splice(parseInt(e) + i * 10, 1, playerType.ships[currentShip])
       document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
     }
+    playerType.ships[parseInt(currentShip)].axis = 'vertical'
   }
 
   // User Boat Selection Uber Function
@@ -287,9 +294,36 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Game logic
 
+  function shipDown(currentShip, playerType) {
+    if (playerType.ships[parseInt(currentShip)].axis === 'horizontal') {
+      for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+        const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i}`)
+        currentShipDown.style.background = 'white'
+      }
+    } else {
+      for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+        const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i * 10}`)
+        currentShipDown.style.background = 'white'
+      }
+    }
+  }
+
+  function gameOver(playerType) {
+    instructionsText.innerHTML = `${playerType.referenceName} Won the Game!`
+    compInstructions.innerHTML = `${playerType.referenceName} Won!`
+    userInstructions.innerHTML = `${playerType.referenceName} Won!`
+  }
+
+  function hittingShip(e, playerType, position) {
+    playerType.ships[parseInt(e)].hp -= 1
+    playerType.totalHp -= 1
+    document.querySelector(`#${playerType.type}-${position}`).style.border = '1px solid red'
+  }
+
   function playerTurn() {
-    if (axis.innerHTML === 'Horizontal' || axis.innerHTML === 'Vertical') {
-      axis.innerHTML = 'Waiting'
+    userInstructions.removeEventListener('click', axisSelector)
+    if (userInstructions.innerHTML === 'Horizontal' || userInstructions.innerHTML === 'Vertical') {
+      userInstructions.innerHTML = 'Waiting'
       compInstructions.innerHTML = 'Waiting'
     }
     const userDiv = document.querySelectorAll('.user-div')
@@ -299,28 +333,25 @@ window.addEventListener('DOMContentLoaded', () => {
     const compActiveDiv = document.querySelectorAll('.comp-active-div')
     compActiveDiv.forEach(div => div.addEventListener('click', playerGuess))
   }
-
   function playerGuess(e) {
-    axis.innerHTML = 'Waiting'
+    userInstructions.innerHTML = 'Waiting'
     const compDiv = document.querySelectorAll('.comp-div')
     compDiv.forEach(div => div.removeEventListener('click', playerGuess))
     compDiv[parseInt(e.target.dataset.id) - 1].setAttribute('class', 'comp-div comp-dead-div grid-div')
     compDiv[parseInt(e.target.dataset.id) - 1].style.border = '1px solid white'
     if (e.target.dataset.shipid !== undefined) {
       compInstructions.innerHTML = 'Hit!'
-      comp.ships[parseInt(e.target.dataset.shipid)].hp -= 1
-      comp.totalHp -= 1
+      hittingShip(e.target.dataset.shipid, comp, parseInt(e.target.dataset.id))
       if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
-        compInstructions.innerHTML = 'You sunk their battleship!'
-      } return playerTurn()
+        compInstructions.innerHTML = `You sunk their ${comp.ships[parseInt(e.target.dataset.shipid)].type}!`
+        shipDown(e.target.dataset.shipid, comp)
+        if (comp.totalHp === 0) {
+          return gameOver(user)
+        }
+      }
+      return playerTurn()
     } else {
       compInstructions.innerHTML = 'Miss!'
-    }
-    if (comp.totalHp === 0) {
-      instructionsText.innerHTML = 'You Win the Game!'
-      compInstructions.innerHTML = 'You Win!'
-      axis.innerHTML = 'You Win!'
-    } else {
       instructionsText.innerHTML = 'Computer\'s turn'
       instructions.addEventListener('click', computerGuess)
     }
@@ -338,13 +369,22 @@ window.addEventListener('DOMContentLoaded', () => {
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
     userDiv[parseInt(compGuess) - 1].style.border = '1px solid white'
-    if (user.grid[parseInt(compGuess)] !== null) {
-      axis.innerHTML = 'Hit!'
+    if (user.grid[parseInt(compGuess)]) {
+      userInstructions.innerHTML = 'Hit!'
+      const currentHitShip = user.grid[parseInt(compGuess)].numberInArray
+      hittingShip(currentHitShip, user, parseInt(compGuess))
       console.log('hit')
       console.log(compGuess)
-      return setTimeout(computerGuess, 5000)
+      if (user.ships[currentHitShip].hp === 0) {
+        userInstructions.innerHTML = `The computer sunk your ${user.ships[currentHitShip].type}!`
+        shipDown(currentHitShip, user)
+        if (user.totalHp === 0) {
+          return gameOver(comp)
+        }
+      }
+      return setTimeout(computerGuess, 3000)
     } else {
-      axis.innerHTML = 'Miss!'
+      userInstructions.innerHTML = 'Miss!'
       console.log('miss')
       console.log(compGuess)
     }
