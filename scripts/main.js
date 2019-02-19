@@ -49,8 +49,8 @@ window.addEventListener('DOMContentLoaded', () => {
       this.position = []
       Ship.classification = 'ship'
     }
-    hit() {
-      this.hp--
+    hit(e) {
+      this.ships[e].hp -= 1
     }
   }
 
@@ -91,9 +91,10 @@ window.addEventListener('DOMContentLoaded', () => {
       newGridDiv[i].setAttribute('id', `${player.type}-${i}`)
       newGridDiv[i].setAttribute('data-id', i)
       newGridDiv[i].innerHTML = [i]
-      newGridDiv[i].addEventListener('click', positionSelection)
       grid.appendChild(newGridDiv[i])
     }
+    const userDiv = document.querySelectorAll('.user-div')
+    userDiv.forEach(div => div.addEventListener('click', positionSelection))
   }
 
   function addBoats(player, ships) {
@@ -177,9 +178,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function addImageToGrid(e, playerType, position) {
-    console.log(`#${playerType.type}-${e}`)
-    console.log(`<img src="images/${playerType.ships[currentShip].id}-${position}.png">`)
-    document.querySelector(`#${playerType.type}-${e}`).innerHTML = `<img src="images/${playerType.ships[currentShip].id}-${position}.png">`
+    document.querySelector(`#${playerType.type}-${e}`).innerHTML = `<img id="${currentShip}" src="images/${playerType.ships[currentShip].id}-${position}.png">`
   }
 
   function addHoriztonalArrayData(e, playerType) {
@@ -221,7 +220,6 @@ window.addEventListener('DOMContentLoaded', () => {
         instructionsText.innerHTML = 'Invalid Placement'
       }
     }
-    console.log(user.ships[1].position.length)
     changeInstructions()
   }
 
@@ -231,6 +229,10 @@ window.addEventListener('DOMContentLoaded', () => {
   function changeInstructions() {
     if (user.ships[0].position.length > 0 && user.ships[1].position.length > 0 && user.ships[2].position.length > 0 && user.ships[3].position.length > 0 && user.ships[4].position.length > 0) {
       instructionsText.innerHTML = 'Play Game!'
+      instructions.style.cursor = 'pointer'
+      // instructions.addEventListener('click', playerTurn)
+      console.log(user.grid)
+      console.log(comp.grid)
     }
   }
 
@@ -256,16 +258,41 @@ window.addEventListener('DOMContentLoaded', () => {
         addImageToGrid(compGridPosition, comp, compDirection)
       }
     }
+    currentShip = null
   }
 
   // Game logic
 
-  
+  function playerTurn() {
+    instructionsText.innerHTML = 'Select Enemy Square'
+    const userDiv = document.querySelectorAll('.user-div')
+    userDiv.forEach(div => div.removeEventListener('click', positionSelection))
+    const compDiv = document.querySelectorAll('.comp-div')
+    compDiv.forEach(div => div.addEventListener('click', playerGuess))
+  }
+
+  function playerGuess(e) {
+    if (e.target.dataset.id === undefined) {
+      instructionsText.innerHTML = 'Hit!'
+      console.log(comp.ships[e.target.id])
+      // comp.hit(e.target.id)
+      console.log(comp.ships[e.target.id].hp)
+
+
+    } else {
+      instructionsText.innerHTML = 'Miss!'
+    }
+
+
+
+  }
 
   //Function calling
 
   setup()
   compSelection()
+  instructions.addEventListener('click', playerTurn)
+
 
 
 })
