@@ -290,8 +290,8 @@ window.addEventListener('DOMContentLoaded', () => {
   function playerTurn() {
     if (axis.innerHTML === 'Horizontal' || axis.innerHTML === 'Vertical') {
       axis.innerHTML = 'Waiting'
+      compInstructions.innerHTML = 'Waiting'
     }
-    compInstructions.innerHTML = 'Waiting'
     const userDiv = document.querySelectorAll('.user-div')
     userDiv.forEach(div => div.removeEventListener('click', positionSelection))
     instructions.removeEventListener('click', playerTurn)
@@ -312,7 +312,7 @@ window.addEventListener('DOMContentLoaded', () => {
       comp.totalHp -= 1
       if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
         compInstructions.innerHTML = 'You sunk their battleship!'
-      }
+      } return playerTurn()
     } else {
       compInstructions.innerHTML = 'Miss!'
     }
@@ -327,16 +327,27 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function computerGuess() {
+    compInstructions.innerHTML = 'Waiting'
     instructions.removeEventListener('click', computerGuess)
-    const compGuess = (Math.floor(Math.random() * 100) + 1)
+    let compGuess = null
+    const compGuessArray = []
+    do {
+      compGuess = (Math.floor(Math.random() * 100) + 1)
+    }
+    while (compGuessArray.includes(compGuess))
+    compGuessArray.push(compGuess)
+    const userDiv = document.querySelectorAll('.user-div')
+    userDiv[parseInt(compGuess) - 1].style.border = '1px solid white'
     if (user.grid[parseInt(compGuess)] !== null) {
       axis.innerHTML = 'Hit!'
       console.log('hit')
+      console.log(compGuess)
+      return setTimeout(computerGuess, 5000)
     } else {
       axis.innerHTML = 'Miss!'
       console.log('miss')
+      console.log(compGuess)
     }
-    console.log(compGuess)
     playerTurn()
   }
 
