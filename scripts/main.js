@@ -87,7 +87,7 @@ window.addEventListener('DOMContentLoaded', () => {
   function buildGrid(grid, player) {
     for (let i = 1; i <= player.grid.length; i++) {
       newGridDiv[i] = document.createElement('div')
-      newGridDiv[i].setAttribute('class', `${player.type}-div grid-div`)
+      newGridDiv[i].setAttribute('class', `${player.type}-div ${player.type}-active-div grid-div`)
       newGridDiv[i].setAttribute('id', `${player.type}-${i}`)
       newGridDiv[i].setAttribute('data-id', i)
       newGridDiv[i].innerHTML = [i]
@@ -178,8 +178,28 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function addImageToGrid(e, playerType, position) {
-    document.querySelector(`#${playerType.type}-${e}`).innerHTML = `<img id="${currentShip}" src="images/${playerType.ships[currentShip].id}-${position}.png">`
+    document.querySelector(`#${playerType.type}-${e}`).innerHTML = `<img id="image-${playerType.type}-${e}" src="images/${playerType.ships[currentShip].id}-${position}.png">`
+    // const newImage = document.querySelector(`#image-${playerType.type}-${e}`)
+    // newImage.setAttribute('class', `${playerType.type}-div ${playerType.type}-active-div ship`)
+    // newImage.setAttribute('id', `image-${playerType.type}-${e}`)
+    // newImage.setAttribute('data-id', e)
+    // newImage.setAttribute('data-shipid', currentShip)
   }
+
+  function addCompImageToGrid(e, playerType, position) {
+    if (position === 'horizontal') {
+      for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+        // console.log(`#${playerType.type}-${parseInt(e) + i}`)
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).style.background = 'black'
+      }
+    } else {
+      for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+        // console.log(`#${playerType.type}-${parseInt(e) + i}`)
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).style.background = 'black'
+      }
+    }
+  }
+
 
   function addHoriztonalArrayData(e, playerType) {
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
@@ -248,14 +268,16 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         while (checkAcceptableHorizontal(compGridPosition, comp, compDirection) === undefined)
         addHoriztonalArrayData(compGridPosition, comp)
-        addImageToGrid(compGridPosition, comp, compDirection)
+        // addImageToGrid(compGridPosition, comp, compDirection)
+        addCompImageToGrid(compGridPosition, comp, 'horizontal')
       } else if (compDirection === 'Vertical') {
         do {
           compGridPosition = (Math.floor(Math.random() * 100) + 1).toString()
         }
         while (checkAcceptableVertical(compGridPosition, comp, compDirection) === undefined)
-        addVerticalArrayData(compGridPosition, comp)
-        addImageToGrid(compGridPosition, comp, compDirection)
+        addVerticalArrayData(compGridPosition, comp, 'vertical')
+        // addImageToGrid(compGridPosition, comp, compDirection)
+        addCompImageToGrid(compGridPosition, comp)
       }
     }
     currentShip = null
@@ -264,27 +286,29 @@ window.addEventListener('DOMContentLoaded', () => {
   // Game logic
 
   function playerTurn() {
+    instructions.removeEventListener('click', playerTurn)
     instructionsText.innerHTML = 'Select Enemy Square'
     const userDiv = document.querySelectorAll('.user-div')
     userDiv.forEach(div => div.removeEventListener('click', positionSelection))
-    const compDiv = document.querySelectorAll('.comp-div')
+    const compDiv = document.querySelectorAll('.comp-active-div')
     compDiv.forEach(div => div.addEventListener('click', playerGuess))
   }
 
   function playerGuess(e) {
-    if (e.target.dataset.id === undefined) {
-      instructionsText.innerHTML = 'Hit!'
-      console.log(comp.ships[e.target.id])
-      // comp.hit(e.target.id)
-      console.log(comp.ships[e.target.id].hp)
-
-
-    } else {
-      instructionsText.innerHTML = 'Miss!'
-    }
-
-
-
+    console.log(e.target.dataset.id)
+    // const compDiv = document.querySelectorAll('.comp-active-div')
+    // compDiv.forEach(div => div.removeEventListener('click', playerGuess))
+    // // compDiv[parseInt(e.target.dataset.id)].setAttribute('class', 'comp-div comp-dead-div grid-div')
+    // if (e.target.dataset.shipid !== undefined) {
+    //   instructionsText.innerHTML = 'Hit!'
+    //   comp.ships[parseInt(e.target.dataset.shipid)].hp -= 1
+    //   if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
+    //     instructionsText.innerHTML = 'You sunk my battleship!'
+    //   }
+    // } else {
+    //   instructionsText.innerHTML = 'Miss!'
+    // }
+    // instructions.addEventListener('click', playerTurn)
   }
 
   //Function calling
