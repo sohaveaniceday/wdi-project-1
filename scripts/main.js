@@ -207,6 +207,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
       playerType.ships[currentShip].position.push(parseInt(e) + i)
       playerType.grid.splice(parseInt(e) + i, 1, playerType.ships[currentShip])
+      document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
     }
   }
 
@@ -214,6 +215,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
       playerType.ships[currentShip].position.push(parseInt(e) + i * 10)
       playerType.grid.splice(parseInt(e) + i * 10, 1, playerType.ships[currentShip])
+      document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
     }
   }
 
@@ -252,9 +254,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (user.ships[0].position.length > 0 && user.ships[1].position.length > 0 && user.ships[2].position.length > 0 && user.ships[3].position.length > 0 && user.ships[4].position.length > 0) {
       instructionsText.innerHTML = 'Play Game!'
       instructions.style.cursor = 'pointer'
-      // instructions.addEventListener('click', playerTurn)
-      console.log(user.grid)
-      console.log(comp.grid)
+      instructions.addEventListener('click', playerTurn)
     }
   }
 
@@ -288,8 +288,10 @@ window.addEventListener('DOMContentLoaded', () => {
   // Game logic
 
   function playerTurn() {
+    if (axis.innerHTML === 'Horizontal' || axis.innerHTML === 'Vertical') {
+      axis.innerHTML = 'Waiting'
+    }
     compInstructions.innerHTML = 'Waiting'
-    axis.innerHTML = 'Waiting'
     const userDiv = document.querySelectorAll('.user-div')
     userDiv.forEach(div => div.removeEventListener('click', positionSelection))
     instructions.removeEventListener('click', playerTurn)
@@ -299,6 +301,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function playerGuess(e) {
+    axis.innerHTML = 'Waiting'
     const compDiv = document.querySelectorAll('.comp-div')
     compDiv.forEach(div => div.removeEventListener('click', playerGuess))
     compDiv[parseInt(e.target.dataset.id) - 1].setAttribute('class', 'comp-div comp-dead-div grid-div')
@@ -307,7 +310,6 @@ window.addEventListener('DOMContentLoaded', () => {
       compInstructions.innerHTML = 'Hit!'
       comp.ships[parseInt(e.target.dataset.shipid)].hp -= 1
       comp.totalHp -= 1
-      console.log(comp.totalHp)
       if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
         compInstructions.innerHTML = 'You sunk their battleship!'
       }
@@ -316,17 +318,32 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     if (comp.totalHp === 0) {
       instructionsText.innerHTML = 'You Win the Game!'
+      compInstructions.innerHTML = 'You Win!'
+      axis.innerHTML = 'You Win!'
     } else {
       instructionsText.innerHTML = 'Computer\'s turn'
-      instructions.addEventListener('click', playerTurn)
+      instructions.addEventListener('click', computerGuess)
     }
+  }
+
+  function computerGuess() {
+    instructions.removeEventListener('click', computerGuess)
+    const compGuess = (Math.floor(Math.random() * 100) + 1)
+    if (user.grid[parseInt(compGuess)] !== null) {
+      axis.innerHTML = 'Hit!'
+      console.log('hit')
+    } else {
+      axis.innerHTML = 'Miss!'
+      console.log('miss')
+    }
+    console.log(compGuess)
+    playerTurn()
   }
 
   //Function calling
 
   setup()
   compSelection()
-  instructions.addEventListener('click', playerTurn)
 
 
 
