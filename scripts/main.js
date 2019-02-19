@@ -375,9 +375,19 @@ window.addEventListener('DOMContentLoaded', () => {
       do {
         if (fixedHuntingDirection) {
           if (fixedHuntingDirection === 'Horizontal') {
-            compGuess = successfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
+            for (let i = 0; i < huntingModeHorizontalArray.length; i++) {
+              compGuess = successfulHit + huntingModeHorizontalArray[i]
+              if (compGuessArray.includes(compGuess)) {
+                compGuess = originalSuccessfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
+              }
+            }
           } else {
-            compGuess = successfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
+            for (let i = 0; i < huntingModeVerticalArray.length; i++) {
+              compGuess = successfulHit + huntingModeHorizontalArray[i]
+              if (compGuessArray.includes(compGuess)) {
+                compGuess = originalSuccessfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
+              }
+            }
           }
         } else {
           huntingDirection = directionArray[Math.floor(Math.random() * 2)]
