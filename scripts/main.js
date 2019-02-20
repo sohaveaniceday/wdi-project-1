@@ -116,7 +116,7 @@ window.addEventListener('DOMContentLoaded', () => {
   function addBoats(player, ships) {
     for (let i = 0; i < player.ships.length; i++) {
       newShipDiv[i] = document.createElement('div')
-      newShipDiv[i].setAttribute('class', 'ship-div')
+      newShipDiv[i].setAttribute('class', `ship-div ${player.ships[i].id}-div`)
       newShipDiv[i].innerHTML = `<img src="${player.ships[i].horiztonalImage}" class="${player.type}-ship ${player.ships[i].id}" data-id="${i}">`
       newShipDiv[i].addEventListener('click', userSelection)
       ships.appendChild(newShipDiv[i])
@@ -222,10 +222,42 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   function addHoriztonalArrayData(e, playerType) {
+    console.log((parseInt(e) + playerType.ships[currentShip].size -1) % 10)
+    if (parseInt(e) % 10 === 0) {
+      playerType.grid[parseInt(e) + playerType.ships[currentShip].size] = 'occupied'
+      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).style.background = 'white'
+      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).setAttribute('data-occupiedid', currentShip)
+    } else if ((parseInt(e) + playerType.ships[currentShip].size -1) % 10 === 9) {
+      playerType.grid[parseInt(e) - 1] = 'occupied'
+      document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).style.background = 'white'
+      document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).setAttribute('data-occupiedid', currentShip)
+    } else {
+      playerType.grid[parseInt(e) - 1] = 'occupied'
+      document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).style.background = 'white'
+      document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).setAttribute('data-occupiedid', currentShip)
+      playerType.grid[parseInt(e) + playerType.ships[currentShip].size] = 'occupied'
+      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).style.background = 'white'
+      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).setAttribute('data-occupiedid', currentShip)
+    }
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+      if (parseInt(e) < 10) {
+        playerType.grid[parseInt(e) + i+10] = 'occupied'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).style.background = 'white'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).setAttribute('data-occupiedid', currentShip)
+      } else if (parseInt(e) > 89) {
+        playerType.grid[parseInt(e) + i-10] = 'occupied'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).setAttribute('data-occupiedid', currentShip)
+      } else {
+        playerType.grid[parseInt(e) + i-10] = 'occupied'
+        playerType.grid[parseInt(e) + i+10] = 'occupied'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).style.background = 'white'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).setAttribute('data-occupiedid', currentShip)
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).setAttribute('data-occupiedid', currentShip)
+      }
       playerType.ships[currentShip].position.push(parseInt(e) + i)
       playerType.grid[parseInt(e) + i] = playerType.ships[currentShip]
-      // playerType.grid.splice(parseInt(e) + i, 1, playerType.ships[currentShip])
       document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
     }
     playerType.ships[parseInt(currentShip)].axis = 'Horizontal'
@@ -241,19 +273,22 @@ window.addEventListener('DOMContentLoaded', () => {
     playerType.ships[parseInt(currentShip)].axis = 'Vertical'
   }
 
+
+
   // User Boat Selection Uber Function
 
   function positionSelection(e) {
     if (currentShip) {
       instructionsText.innerHTML = 'Pick Your Boat'
       if (checkAcceptableHorizontal(e.target.dataset.id, user, userDirection)) {
-        clearCurrentObjectPositionArray(user)
-        if (checkIfAlreadyOnMap(user)) {
-          clearImageAlreadyOnMap(user)
-        }
+        // clearCurrentObjectPositionArray(user)
+        // if (checkIfAlreadyOnMap(user)) {
+        //   clearImageAlreadyOnMap(user)
+        // }
         addImageToGrid(e.target.dataset.id, user, 'Horizontal')
-        clearExistingArrayPosition(user)
+        // clearExistingArrayPosition(user)
         addHoriztonalArrayData(e.target.dataset.id, user)
+        document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else if (checkAcceptableVertical(e.target.dataset.id, user, userDirection)) {
         clearCurrentObjectPositionArray(user)
         if (checkIfAlreadyOnMap(user)) {
@@ -263,9 +298,10 @@ window.addEventListener('DOMContentLoaded', () => {
         clearExistingArrayPosition(user)
         addVerticalArrayData(e.target.dataset.id, user)
       } else {
-        instructionsText.innerHTML = 'Invalid Placement'
+        instructionsText.innerHTML = 'Invalid Placement. Select Boat Again.'
       }
     }
+    currentShip = null
     console.log(user.grid)
     changeInstructions()
   }
@@ -315,12 +351,12 @@ window.addEventListener('DOMContentLoaded', () => {
     if (playerType.ships[parseInt(currentShip)].axis === 'Horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i}`)
-        currentShipDown.style.background = 'white'
+        currentShipDown.style.background = 'red'
       }
     } else {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i * 10}`)
-        currentShipDown.style.background = 'white'
+        currentShipDown.style.background = 'red'
       }
     }
   }
@@ -355,7 +391,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const compDiv = document.querySelectorAll('.comp-div')
     compDiv.forEach(div => div.removeEventListener('click', playerGuess))
     compDiv[parseInt(e.target.dataset.id)].setAttribute('class', 'comp-div comp-dead-div grid-div')
-    compDiv[parseInt(e.target.dataset.id)].style.border = '1px solid white'
+    compDiv[parseInt(e.target.dataset.id)].style.border = '2px solid pink'
     if (e.target.dataset.shipid !== undefined) {
       compInstructions.innerHTML = 'Hit!'
       hittingShip(e.target.dataset.shipid, comp, parseInt(e.target.dataset.id))
@@ -438,9 +474,9 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
-    userDiv[parseInt(compGuess)].style.border = '1px solid white'
+    userDiv[parseInt(compGuess)].style.border = '2px solid pink'
     console.log(`comp guess ${compGuess}`)
-    if (user.grid[parseInt(compGuess)]) {
+    if (userDiv[parseInt(compGuess)].getAttribute('data-shipid')) {
       userInstructions.innerHTML = 'Hit!'
       const currentHitShip = user.grid[parseInt(compGuess)].numberInArray
       hittingShip(currentHitShip, user, parseInt(compGuess))
