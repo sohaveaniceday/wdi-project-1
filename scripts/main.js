@@ -222,7 +222,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   function addHoriztonalArrayData(e, playerType) {
-    console.log((parseInt(e) + playerType.ships[currentShip].size -1) % 10)
     if (parseInt(e) % 10 === 0) {
       playerType.grid[parseInt(e) + playerType.ships[currentShip].size] = 'occupied'
       document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).style.background = 'white'
@@ -249,10 +248,10 @@ window.addEventListener('DOMContentLoaded', () => {
         document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).setAttribute('data-occupiedid', currentShip)
       } else {
-        playerType.grid[parseInt(e) + i-10] = 'occupied'
         playerType.grid[parseInt(e) + i+10] = 'occupied'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).setAttribute('data-occupiedid', currentShip)
+        playerType.grid[parseInt(e) + i-10] = 'occupied'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).setAttribute('data-occupiedid', currentShip)
       }
@@ -264,10 +263,42 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function addVerticalArrayData(e, playerType) {
+    console.log(parseInt(e) + (playerType.ships[currentShip].size - 1) * 10)
+    if (parseInt(e) < 10) {
+      playerType.grid[parseInt(e) + playerType.ships[currentShip].size * 10] = 'occupied'
+      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).style.background = 'white'
+      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).setAttribute('data-occupiedid', currentShip)
+    } else if (parseInt(e) + (playerType.ships[currentShip].size - 1) * 10 > 89) {
+      playerType.grid[parseInt(e) - 1 * 10] = 'occupied'
+      document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).style.background = 'white'
+      document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).setAttribute('data-occupiedid', currentShip)
+    } else {
+      playerType.grid[parseInt(e) + playerType.ships[currentShip].size * 10] = 'occupied'
+      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).style.background = 'white'
+      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).setAttribute('data-occupiedid', currentShip)
+      playerType.grid[parseInt(e) - 1 * 10] = 'occupied'
+      document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).style.background = 'white'
+      document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).setAttribute('data-occupiedid', currentShip)
+    }
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
+      if (parseInt(e) % 10 === 0) {
+        playerType.grid[parseInt(e) + i * 10 + 1] = 'occupied'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).style.background = 'white'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).setAttribute('data-occupiedid', currentShip)
+      } else if (parseInt(e) % 10 === 9) {
+        playerType.grid[parseInt(e) + i * 10 - 1] = 'occupied'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).style.background = 'white'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).setAttribute('data-occupiedid', currentShip)
+      } else {
+        playerType.grid[parseInt(e) + i * 10 + 1] = 'occupied'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).style.background = 'white'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).setAttribute('data-occupiedid', currentShip)
+        playerType.grid[parseInt(e) + i * 10 - 1] = 'occupied'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).style.background = 'white'
+        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).setAttribute('data-occupiedid', currentShip)
+      }
       playerType.ships[currentShip].position.push(parseInt(e) + i * 10)
       playerType.grid[parseInt(e) + i * 10] = playerType.ships[currentShip]
-      // playerType.grid.splice(parseInt(e) + i * 10, 1, playerType.ships[currentShip])
       document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
     }
     playerType.ships[parseInt(currentShip)].axis = 'Vertical'
@@ -291,12 +322,13 @@ window.addEventListener('DOMContentLoaded', () => {
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else if (checkAcceptableVertical(e.target.dataset.id, user, userDirection)) {
         clearCurrentObjectPositionArray(user)
-        if (checkIfAlreadyOnMap(user)) {
-          clearImageAlreadyOnMap(user)
-        }
+        // if (checkIfAlreadyOnMap(user)) {
+        //   clearImageAlreadyOnMap(user)
+        // }
         addImageToGrid(e.target.dataset.id, user, 'Vertical')
-        clearExistingArrayPosition(user)
+        // clearExistingArrayPosition(user)
         addVerticalArrayData(e.target.dataset.id, user)
+        document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else {
         instructionsText.innerHTML = 'Invalid Placement. Select Boat Again.'
       }
@@ -370,7 +402,7 @@ window.addEventListener('DOMContentLoaded', () => {
   function hittingShip(e, playerType, position) {
     playerType.ships[parseInt(e)].hp -= 1
     playerType.totalHp -= 1
-    document.querySelector(`#${playerType.type}-${position}`).style.border = '1px solid red'
+    document.querySelector(`#${playerType.type}-${position}`).style.border = '2px solid red'
   }
 
   function playerTurn() {
