@@ -107,7 +107,7 @@ window.addEventListener('DOMContentLoaded', () => {
       newGridDiv[i].setAttribute('class', `${player.type}-div ${player.type}-active-div grid-div`)
       newGridDiv[i].setAttribute('id', `${player.type}-${i}`)
       newGridDiv[i].setAttribute('data-id', i)
-      newGridDiv[i].innerHTML = [i]
+      // newGridDiv[i].innerHTML = [i]
       grid.appendChild(newGridDiv[i])
     }
     const userDiv = document.querySelectorAll('.user-div')
@@ -208,13 +208,13 @@ window.addEventListener('DOMContentLoaded', () => {
   function addCompImageToGrid(e, playerType, position) {
     if (position === 'Horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).style.background = 'black'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
       }
       playerType.ships[parseInt(currentShip)].axis = 'Horizontal'
     } else {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).style.background = 'black'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
       }
       playerType.ships[parseInt(currentShip)].axis = 'Vertical'
@@ -226,42 +226,42 @@ window.addEventListener('DOMContentLoaded', () => {
     if (parseInt(e) % 10 === 0) {
       playerType.grid[parseInt(e) + playerType.ships[currentShip].size] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + playerType.ships[currentShip].size)
-      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).style.background = 'white'
+      // document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).setAttribute('data-occupiedid', currentShip)
     } else if ((parseInt(e) + playerType.ships[currentShip].size -1) % 10 === 9) {
       playerType.grid[parseInt(e) - 1] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) - 1)
-      document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).style.background = 'white'
+      // document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).setAttribute('data-occupiedid', currentShip)
     } else {
       playerType.grid[parseInt(e) - 1] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) - 1)
-      document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).style.background = 'white'
+      // document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).setAttribute('data-occupiedid', currentShip)
       playerType.grid[parseInt(e) + playerType.ships[currentShip].size] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + playerType.ships[currentShip].size)
-      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).style.background = 'white'
+      // document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).setAttribute('data-occupiedid', currentShip)
     }
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
       if (parseInt(e) < 10) {
         playerType.grid[parseInt(e) + i+10] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i + 10)
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).style.background = 'white'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).setAttribute('data-occupiedid', currentShip)
       } else if (parseInt(e) > 89) {
         playerType.grid[parseInt(e) + i-10] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i - 10)
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).setAttribute('data-occupiedid', currentShip)
       } else {
         playerType.grid[parseInt(e) + i+10] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i + 10)
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).style.background = 'white'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).setAttribute('data-occupiedid', currentShip)
         playerType.grid[parseInt(e) + i-10] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i - 10)
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).setAttribute('data-occupiedid', currentShip)
       }
       playerType.ships[currentShip].position.push(parseInt(e) + i)
@@ -276,42 +276,42 @@ window.addEventListener('DOMContentLoaded', () => {
     if (parseInt(e) < 10) {
       playerType.grid[parseInt(e) + playerType.ships[currentShip].size * 10] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + playerType.ships[currentShip].size * 10)
-      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).style.background = 'white'
+      // document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).setAttribute('data-occupiedid', currentShip)
     } else if (parseInt(e) + (playerType.ships[currentShip].size - 1) * 10 > 89) {
       playerType.grid[parseInt(e) - 1 * 10] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) - 1 * 10)
-      document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).style.background = 'white'
+      // document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).setAttribute('data-occupiedid', currentShip)
     } else {
       playerType.grid[parseInt(e) + playerType.ships[currentShip].size * 10] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + playerType.ships[currentShip].size * 10)
-      document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).style.background = 'white'
+      // document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).setAttribute('data-occupiedid', currentShip)
       playerType.grid[parseInt(e) - 1 * 10] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) - 1 * 10)
-      document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).style.background = 'white'
+      // document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).setAttribute('data-occupiedid', currentShip)
     }
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
       if (parseInt(e) % 10 === 0) {
         playerType.grid[parseInt(e) + i * 10 + 1] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i * 10 + 1)
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).style.background = 'white'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).setAttribute('data-occupiedid', currentShip)
       } else if (parseInt(e) % 10 === 9) {
         playerType.grid[parseInt(e) + i * 10 - 1] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i * 10 - 1)
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).style.background = 'white'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).setAttribute('data-occupiedid', currentShip)
       } else {
         playerType.grid[parseInt(e) + i * 10 + 1] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i * 10 + 1)
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).style.background = 'white'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).setAttribute('data-occupiedid', currentShip)
         playerType.grid[parseInt(e) + i * 10 - 1] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i * 10 - 1)
-        document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).style.background = 'white'
+        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).setAttribute('data-occupiedid', currentShip)
       }
       playerType.ships[currentShip].position.push(parseInt(e) + i * 10)
@@ -440,7 +440,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const compDiv = document.querySelectorAll('.comp-div')
     compDiv.forEach(div => div.removeEventListener('click', playerGuess))
     compDiv[parseInt(e.target.dataset.id)].setAttribute('class', 'comp-div comp-dead-div grid-div')
-    compDiv[parseInt(e.target.dataset.id)].style.border = '2px solid pink'
+    compDiv[parseInt(e.target.dataset.id)].style.border = '2px solid white'
     if (e.target.dataset.shipid !== undefined) {
       compInstructions.innerHTML = 'Hit!'
       hittingShip(e.target.dataset.shipid, comp, parseInt(e.target.dataset.id))
@@ -455,7 +455,8 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       compInstructions.innerHTML = 'Miss!'
       instructionsText.innerHTML = 'Computer\'s turn'
-      instructions.addEventListener('click', computerGuess)
+      setTimeout(computerGuess, 1000)
+      // instructions.addEventListener('click', computerGuess)
     }
   }
 
@@ -523,7 +524,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
-    userDiv[parseInt(compGuess)].style.border = '2px solid pink'
+    userDiv[parseInt(compGuess)].style.border = '2px solid white'
     console.log(`comp guess ${compGuess}`)
     if (userDiv[parseInt(compGuess)].getAttribute('data-shipid')) {
       userInstructions.innerHTML = 'Hit!'
@@ -552,7 +553,7 @@ window.addEventListener('DOMContentLoaded', () => {
           return gameOver(comp)
         }
       }
-      return setTimeout(computerGuess, 3000)
+      return setTimeout(computerGuess, 2000)
     } else {
       userInstructions.innerHTML = 'Miss!'
       console.log('miss')
