@@ -379,13 +379,22 @@ window.addEventListener('DOMContentLoaded', () => {
           if (fixedHuntingDirection === 'Horizontal') {
             for (let i = 0; i < 2; i++) {
               compGuess = successfulHit + huntingModeHorizontalArray[i]
-              compSuggestionsArray.push(compGuess)
+              if (i === 1 && parseInt(compGuess) % 10 !== 0) {
+                compSuggestionsArray.push(compGuess)
+              }
+              if (i === 0 && parseInt(compGuess) % 10 !== 1) {
+                compSuggestionsArray.push(compGuess)
+              }
             }
             if ((compSuggestionsArray.every(r=> compGuessArray.indexOf(r) >= 0))) {
               compGuess = originalSuccessfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
             } else {
               do {
-                compGuess = successfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
+                if (compSuggestionsArray.length > 1) {
+                  compGuess = successfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
+                } else {
+                  compGuess = compSuggestionsArray[0]
+                }
               } while (compGuessArray.includes(compGuess))
             }
           } else {
@@ -405,6 +414,12 @@ window.addEventListener('DOMContentLoaded', () => {
           huntingDirection = directionArray[Math.floor(Math.random() * 2)]
           if (huntingDirection === 'Horizontal') {
             compGuess = successfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
+            if (parseInt(successfulHit) % 10 === 1) {
+              compGuess = successfulHit + huntingModeHorizontalArray[0]
+            }
+            if (parseInt(successfulHit) % 10 === 0) {
+              compGuess = successfulHit + huntingModeHorizontalArray[1]
+            }
           } else {
             compGuess = successfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
           }
@@ -419,6 +434,7 @@ window.addEventListener('DOMContentLoaded', () => {
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
     userDiv[parseInt(compGuess) - 1].style.border = '1px solid white'
+    console.log(`comp guess ${compGuess}`)
     if (user.grid[parseInt(compGuess)]) {
       userInstructions.innerHTML = 'Hit!'
       const currentHitShip = user.grid[parseInt(compGuess)].numberInArray
