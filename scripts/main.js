@@ -383,7 +383,7 @@ window.addEventListener('DOMContentLoaded', () => {
             }
           } else {
             for (let i = 0; i < huntingModeVerticalArray.length; i++) {
-              compGuess = successfulHit + huntingModeHorizontalArray[i]
+              compGuess = successfulHit + huntingModeVerticalArray[i]
               if (compGuessArray.includes(compGuess)) {
                 compGuess = originalSuccessfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
               }
@@ -404,21 +404,22 @@ window.addEventListener('DOMContentLoaded', () => {
       }
       while (compGuessArray.includes(compGuess))
     }
-    console.log(compGuess)
-    console.log(huntingMode)
-    console.log(`successful hit: ${successfulHit}`)
-    console.log(`hunting tally: ${huntingTally}`)
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
     userDiv[parseInt(compGuess) - 1].style.border = '1px solid white'
+    console.log(compGuess)
     if (user.grid[parseInt(compGuess)]) {
       userInstructions.innerHTML = 'Hit!'
       const currentHitShip = user.grid[parseInt(compGuess)].numberInArray
       hittingShip(currentHitShip, user, parseInt(compGuess))
-      console.log('hit')
       huntingMode = true
       successfulHit = compGuess
       huntingTally += 1
+      console.log('hit')
+      console.log(huntingMode)
+      console.log(`successful hit: ${successfulHit}`)
+      console.log(`hunting tally: ${huntingTally}`)
+      console.log(`hunting tally: ${fixedHuntingDirection}`)
       if (huntingTally === 1) {
         originalSuccessfulHit = compGuess
       }
