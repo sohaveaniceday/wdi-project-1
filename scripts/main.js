@@ -185,6 +185,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function clearImageAlreadyOnMap(playerType) {
     document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip])}`).innerHTML = `${playerType.grid.indexOf(playerType.ships[currentShip])}`
+    document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip])}`).removeAttribute('data-shipid')
   }
 
   function clearExistingArrayPosition(playerType) {
@@ -203,18 +204,18 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function addCompImageToGrid(e, playerType, position) {
-    if (position === 'horizontal') {
+    if (position === 'Horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
       }
-      playerType.ships[parseInt(currentShip)].axis = 'horizontal'
+      playerType.ships[parseInt(currentShip)].axis = 'Horizontal'
     } else {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
       }
-      playerType.ships[parseInt(currentShip)].axis = 'vertical'
+      playerType.ships[parseInt(currentShip)].axis = 'Vertical'
     }
   }
 
@@ -225,7 +226,7 @@ window.addEventListener('DOMContentLoaded', () => {
       playerType.grid.splice(parseInt(e) + i, 1, playerType.ships[currentShip])
       document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
     }
-    playerType.ships[parseInt(currentShip)].axis = 'horizontal'
+    playerType.ships[parseInt(currentShip)].axis = 'Horizontal'
   }
 
   function addVerticalArrayData(e, playerType) {
@@ -234,7 +235,7 @@ window.addEventListener('DOMContentLoaded', () => {
       playerType.grid.splice(parseInt(e) + i * 10, 1, playerType.ships[currentShip])
       document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
     }
-    playerType.ships[parseInt(currentShip)].axis = 'vertical'
+    playerType.ships[parseInt(currentShip)].axis = 'Vertical'
   }
 
   // User Boat Selection Uber Function
@@ -247,7 +248,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (checkIfAlreadyOnMap(user)) {
           clearImageAlreadyOnMap(user)
         }
-        addImageToGrid(e.target.dataset.id, user, 'horizontal')
+        addImageToGrid(e.target.dataset.id, user, 'Horizontal')
         clearExistingArrayPosition(user)
         addHoriztonalArrayData(e.target.dataset.id, user)
       } else if (checkAcceptableVertical(e.target.dataset.id, user, userDirection)) {
@@ -255,7 +256,7 @@ window.addEventListener('DOMContentLoaded', () => {
         if (checkIfAlreadyOnMap(user)) {
           clearImageAlreadyOnMap(user)
         }
-        addImageToGrid(e.target.dataset.id, user, 'vertical')
+        addImageToGrid(e.target.dataset.id, user, 'Vertical')
         clearExistingArrayPosition(user)
         addVerticalArrayData(e.target.dataset.id, user)
       } else {
@@ -289,13 +290,13 @@ window.addEventListener('DOMContentLoaded', () => {
         while (checkAcceptableHorizontal(compGridPosition, comp, compDirection) === undefined)
         addHoriztonalArrayData(compGridPosition, comp)
         // addImageToGrid(compGridPosition, comp, compDirection)
-        addCompImageToGrid(compGridPosition, comp, 'horizontal')
+        addCompImageToGrid(compGridPosition, comp, 'Horizontal')
       } else if (compDirection === 'Vertical') {
         do {
           compGridPosition = (Math.floor(Math.random() * 100) + 1).toString()
         }
         while (checkAcceptableVertical(compGridPosition, comp, compDirection) === undefined)
-        addVerticalArrayData(compGridPosition, comp, 'vertical')
+        addVerticalArrayData(compGridPosition, comp, 'Vertical')
         // addImageToGrid(compGridPosition, comp, compDirection)
         addCompImageToGrid(compGridPosition, comp)
       }
@@ -306,7 +307,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Game logic
 
   function shipDown(currentShip, playerType) {
-    if (playerType.ships[parseInt(currentShip)].axis === 'horizontal') {
+    if (playerType.ships[parseInt(currentShip)].axis === 'Horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i}`)
         currentShipDown.style.background = 'white'
@@ -372,27 +373,19 @@ window.addEventListener('DOMContentLoaded', () => {
     compInstructions.innerHTML = 'Waiting'
     instructions.removeEventListener('click', computerGuess)
     if (huntingMode === true) {
-      console.log('initalise hunting mode')
       do {
         if (fixedHuntingDirection) {
-          console.log('initialise fixedHuntingDirection')
           const compSuggestionsArray = []
           if (fixedHuntingDirection === 'Horizontal') {
-            console.log('initalise horizontal fixedHuntingDirection')
             for (let i = 0; i < 2; i++) {
               compGuess = successfulHit + huntingModeHorizontalArray[i]
               compSuggestionsArray.push(compGuess)
             }
-            console.log(compSuggestionsArray)
-            console.log(compGuessArray)
             if ((compSuggestionsArray.every(r=> compGuessArray.indexOf(r) >= 0))) {
-              console.log('going back to original value')
               compGuess = originalSuccessfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
             } else {
-              let j = 0
               do {
-                compGuess = successfulHit + huntingModeHorizontalArray[j]
-                j++
+                compGuess = successfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
               } while (compGuessArray.includes(compGuess))
             }
           } else {
@@ -402,10 +395,8 @@ window.addEventListener('DOMContentLoaded', () => {
               if ((compSuggestionsArray.every(r=> compGuessArray.indexOf(r) >= 0))) {
                 compGuess = originalSuccessfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
               } else {
-                let j = 0
                 do {
-                  compGuess = successfulHit + huntingModeVerticalArray[j]
-                  j++
+                  compGuess = successfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
                 } while (compGuessArray.includes(compGuess))
               }
             }
@@ -418,8 +409,6 @@ window.addEventListener('DOMContentLoaded', () => {
             compGuess = successfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
           }
         }
-        console.log(`comps guess in hunting mode: ${compGuess}`)
-        console.log(`does comp's guess feature in used array: ${compGuessArray.includes(compGuess)}`)
       }  while (compGuessArray.includes(compGuess))
     } else {
       do {
@@ -444,11 +433,6 @@ window.addEventListener('DOMContentLoaded', () => {
         fixedHuntingDirection = huntingDirection
       }
       console.log('hit')
-      // console.log(huntingMode)
-      // console.log(`successful hit: ${successfulHit}`)
-      // console.log(`hunting tally: ${huntingTally}`)
-      // console.log(`original successful hit: ${originalSuccessfulHit}`)
-      // console.log(`fixed hunting direction: ${fixedHuntingDirection}`)
       if (user.ships[currentHitShip].hp === 0) {
         userInstructions.innerHTML = `They sunk your ${user.ships[currentHitShip].type}!`
         shipDown(currentHitShip, user)
