@@ -190,7 +190,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function clearExistingArrayPosition(playerType) {
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
-      playerType.grid.splice(playerType.grid.indexOf(playerType.ships[currentShip]), 1, null)
+      playerType.grid[playerType.grid.indexOf(playerType.ships[currentShip])] = null
+      // playerType.grid.splice(playerType.grid.indexOf(playerType.ships[currentShip]), 1, null)
     }
   }
 
@@ -223,7 +224,8 @@ window.addEventListener('DOMContentLoaded', () => {
   function addHoriztonalArrayData(e, playerType) {
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
       playerType.ships[currentShip].position.push(parseInt(e) + i)
-      playerType.grid.splice(parseInt(e) + i, 1, playerType.ships[currentShip])
+      playerType.grid[parseInt(e) + i] = playerType.ships[currentShip]
+      // playerType.grid.splice(parseInt(e) + i, 1, playerType.ships[currentShip])
       document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
     }
     playerType.ships[parseInt(currentShip)].axis = 'Horizontal'
@@ -232,7 +234,8 @@ window.addEventListener('DOMContentLoaded', () => {
   function addVerticalArrayData(e, playerType) {
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
       playerType.ships[currentShip].position.push(parseInt(e) + i * 10)
-      playerType.grid.splice(parseInt(e) + i * 10, 1, playerType.ships[currentShip])
+      playerType.grid[parseInt(e) + i * 10] = playerType.ships[currentShip]
+      // playerType.grid.splice(parseInt(e) + i * 10, 1, playerType.ships[currentShip])
       document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
     }
     playerType.ships[parseInt(currentShip)].axis = 'Vertical'
@@ -287,7 +290,7 @@ window.addEventListener('DOMContentLoaded', () => {
       currentShip = i
       if (compDirection === 'Horizontal') {
         do {
-          compGridPosition = (Math.floor(Math.random() * (+99 - +0) + +0)).toString()
+          compGridPosition = (Math.floor(Math.random() * 100)).toString()
         }
         while (checkAcceptableHorizontal(compGridPosition, comp, compDirection) === undefined)
         addHoriztonalArrayData(compGridPosition, comp)
@@ -295,7 +298,7 @@ window.addEventListener('DOMContentLoaded', () => {
         addCompImageToGrid(compGridPosition, comp, 'Horizontal')
       } else if (compDirection === 'Vertical') {
         do {
-          compGridPosition = (Math.floor(Math.random() * (+99 - +0)) + +0).toString()
+          compGridPosition = (Math.floor(Math.random() * 100)).toString()
         }
         while (checkAcceptableVertical(compGridPosition, comp, compDirection) === undefined)
         addVerticalArrayData(compGridPosition, comp, 'Vertical')
@@ -429,7 +432,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }  while (compGuessArray.includes(compGuess))
     } else {
       do {
-        compGuess = (Math.floor(Math.random() * (+99 - +0)) + +0)
+        compGuess = (Math.floor(Math.random() * 100))
       }
       while (compGuessArray.includes(compGuess))
     }
