@@ -81,11 +81,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function shipBuilding() {
       for (let i = 0; i < players.length; i++) {
-        const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 6, 60, 'images/aircraft-carrier-horizontal.png','images/aircraft-carrier-vertical.png', 0)
-        const battleship = new Ship('Battleship', 'battleship', 4, 4, 7, 70, 'images/battleship-horizontal.png','images/battleship-vertical.png', 1)
-        const submarine = new Ship('Submarine', 'submarine', 3, 3, 8, 80, 'images/submarine-horizontal.png','images/submarine-vertical.png', 2)
-        const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 8, 80, 'images/destroyer-horizontal.png','images/destroyer-vertical.png', 3)
-        const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 9, 90, 'images/patrol-boat-horizontal.png','images/patrol-boat-vertical.png', 4)
+        const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 5, 59, 'images/aircraft-carrier-horizontal.png','images/aircraft-carrier-vertical.png', 0)
+        const battleship = new Ship('Battleship', 'battleship', 4, 4, 6, 69, 'images/battleship-horizontal.png','images/battleship-vertical.png', 1)
+        const submarine = new Ship('Submarine', 'submarine', 3, 3, 7, 79, 'images/submarine-horizontal.png','images/submarine-vertical.png', 2)
+        const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 7, 79, 'images/destroyer-horizontal.png','images/destroyer-vertical.png', 3)
+        const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 8, 89, 'images/patrol-boat-horizontal.png','images/patrol-boat-vertical.png', 4)
         players[i].ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
       }
     }
@@ -101,7 +101,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // Build Grid and Ship Functions
 
   function buildGrid(grid, player) {
-    for (let i = 1; i <= player.grid.length; i++) {
+    for (let i = 0; i < player.grid.length; i++) {
       newGridDiv[i] = document.createElement('div')
       newGridDiv[i].setAttribute('class', `${player.type}-div ${player.type}-active-div grid-div`)
       newGridDiv[i].setAttribute('id', `${player.type}-${i}`)
@@ -144,7 +144,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function checkAcceptableHorizontal(e, playerType, direction) {
-    if (direction === 'Horizontal' && e.substr(e.length - 1) !== '0' && e.substr(e.length - 1) <= playerType.ships[currentShip].maxHoriztonal && checkHoriztonalOccupied(e, playerType)) {
+    if (direction === 'Horizontal' && e.substr(e.length - 1) !== '9' && e.substr(e.length - 1) <= playerType.ships[currentShip].maxHoriztonal && checkHoriztonalOccupied(e, playerType)) {
       return true
     }
   }
@@ -263,6 +263,7 @@ window.addEventListener('DOMContentLoaded', () => {
         instructionsText.innerHTML = 'Invalid Placement'
       }
     }
+    console.log(user.grid)
     changeInstructions()
   }
 
@@ -274,6 +275,7 @@ window.addEventListener('DOMContentLoaded', () => {
       instructionsText.innerHTML = 'Play Game!'
       instructions.style.cursor = 'pointer'
       instructions.addEventListener('click', playerTurn)
+      console.log(user.grid)
     }
   }
 
@@ -285,7 +287,7 @@ window.addEventListener('DOMContentLoaded', () => {
       currentShip = i
       if (compDirection === 'Horizontal') {
         do {
-          compGridPosition = (Math.floor(Math.random() * 100) + 1).toString()
+          compGridPosition = (Math.floor(Math.random() * (+99 - +0) + +0)).toString()
         }
         while (checkAcceptableHorizontal(compGridPosition, comp, compDirection) === undefined)
         addHoriztonalArrayData(compGridPosition, comp)
@@ -293,7 +295,7 @@ window.addEventListener('DOMContentLoaded', () => {
         addCompImageToGrid(compGridPosition, comp, 'Horizontal')
       } else if (compDirection === 'Vertical') {
         do {
-          compGridPosition = (Math.floor(Math.random() * 100) + 1).toString()
+          compGridPosition = (Math.floor(Math.random() * (+99 - +0)) + +0).toString()
         }
         while (checkAcceptableVertical(compGridPosition, comp, compDirection) === undefined)
         addVerticalArrayData(compGridPosition, comp, 'Vertical')
@@ -349,8 +351,8 @@ window.addEventListener('DOMContentLoaded', () => {
     userInstructions.innerHTML = 'Waiting'
     const compDiv = document.querySelectorAll('.comp-div')
     compDiv.forEach(div => div.removeEventListener('click', playerGuess))
-    compDiv[parseInt(e.target.dataset.id) - 1].setAttribute('class', 'comp-div comp-dead-div grid-div')
-    compDiv[parseInt(e.target.dataset.id) - 1].style.border = '1px solid white'
+    compDiv[parseInt(e.target.dataset.id)].setAttribute('class', 'comp-div comp-dead-div grid-div')
+    compDiv[parseInt(e.target.dataset.id)].style.border = '1px solid white'
     if (e.target.dataset.shipid !== undefined) {
       compInstructions.innerHTML = 'Hit!'
       hittingShip(e.target.dataset.shipid, comp, parseInt(e.target.dataset.id))
@@ -379,10 +381,10 @@ window.addEventListener('DOMContentLoaded', () => {
           if (fixedHuntingDirection === 'Horizontal') {
             for (let i = 0; i < 2; i++) {
               compGuess = successfulHit + huntingModeHorizontalArray[i]
-              if (i === 1 && parseInt(compGuess) % 10 !== 0) {
+              if (i === 1 && parseInt(compGuess) % 10 !== 9) {
                 compSuggestionsArray.push(compGuess)
               }
-              if (i === 0 && parseInt(compGuess) % 10 !== 1) {
+              if (i === 0 && parseInt(compGuess) % 10 !== 0) {
                 compSuggestionsArray.push(compGuess)
               }
             }
@@ -414,10 +416,10 @@ window.addEventListener('DOMContentLoaded', () => {
           huntingDirection = directionArray[Math.floor(Math.random() * 2)]
           if (huntingDirection === 'Horizontal') {
             compGuess = successfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
-            if (parseInt(successfulHit) % 10 === 1) {
+            if (parseInt(successfulHit) % 10 === 0) {
               compGuess = successfulHit + huntingModeHorizontalArray[0]
             }
-            if (parseInt(successfulHit) % 10 === 0) {
+            if (parseInt(successfulHit) % 10 === 9) {
               compGuess = successfulHit + huntingModeHorizontalArray[1]
             }
           } else {
@@ -427,13 +429,13 @@ window.addEventListener('DOMContentLoaded', () => {
       }  while (compGuessArray.includes(compGuess))
     } else {
       do {
-        compGuess = (Math.floor(Math.random() * 100) + 1)
+        compGuess = (Math.floor(Math.random() * (+99 - +0)) + +0)
       }
       while (compGuessArray.includes(compGuess))
     }
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
-    userDiv[parseInt(compGuess) - 1].style.border = '1px solid white'
+    userDiv[parseInt(compGuess)].style.border = '1px solid white'
     console.log(`comp guess ${compGuess}`)
     if (user.grid[parseInt(compGuess)]) {
       userInstructions.innerHTML = 'Hit!'

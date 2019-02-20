@@ -1,6 +1,9 @@
 * {
   box-sizing: border-box; }
 
+body {
+  background: "images/background.png"; }
+
 .container {
   display: flex;
   margin: 0 auto; }
