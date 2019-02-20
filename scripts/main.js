@@ -372,20 +372,41 @@ window.addEventListener('DOMContentLoaded', () => {
     compInstructions.innerHTML = 'Waiting'
     instructions.removeEventListener('click', computerGuess)
     if (huntingMode === true) {
+      console.log('initalise hunting mode')
       do {
         if (fixedHuntingDirection) {
+          console.log('initialise fixedHuntingDirection')
+          const compSuggestionsArray = []
           if (fixedHuntingDirection === 'Horizontal') {
-            for (let i = 0; i < huntingModeHorizontalArray.length; i++) {
+            console.log('initalise horizontal fixedHuntingDirection')
+            for (let i = 0; i < 2; i++) {
               compGuess = successfulHit + huntingModeHorizontalArray[i]
-              if (compGuessArray.includes(compGuess)) {
-                compGuess = originalSuccessfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
-              }
+              compSuggestionsArray.push(compGuess)
+            }
+            console.log(compSuggestionsArray)
+            console.log(compGuessArray)
+            if ((compSuggestionsArray.every(r=> compGuessArray.indexOf(r) >= 0))) {
+              console.log('going back to original value')
+              compGuess = originalSuccessfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
+            } else {
+              let j = 0
+              do {
+                compGuess = successfulHit + huntingModeHorizontalArray[j]
+                j++
+              } while (compGuessArray.includes(compGuess))
             }
           } else {
-            for (let i = 0; i < huntingModeVerticalArray.length; i++) {
+            for (let i = 0; i < 2; i++) {
               compGuess = successfulHit + huntingModeVerticalArray[i]
-              if (compGuessArray.includes(compGuess)) {
+              compSuggestionsArray.push(compGuess)
+              if ((compSuggestionsArray.every(r=> compGuessArray.indexOf(r) >= 0))) {
                 compGuess = originalSuccessfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
+              } else {
+                let j = 0
+                do {
+                  compGuess = successfulHit + huntingModeVerticalArray[j]
+                  j++
+                } while (compGuessArray.includes(compGuess))
               }
             }
           }
@@ -397,6 +418,8 @@ window.addEventListener('DOMContentLoaded', () => {
             compGuess = successfulHit + huntingModeVerticalArray[Math.floor(Math.random() * 2)]
           }
         }
+        console.log(`comps guess in hunting mode: ${compGuess}`)
+        console.log(`does comp's guess feature in used array: ${compGuessArray.includes(compGuess)}`)
       }  while (compGuessArray.includes(compGuess))
     } else {
       do {
@@ -407,7 +430,6 @@ window.addEventListener('DOMContentLoaded', () => {
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
     userDiv[parseInt(compGuess) - 1].style.border = '1px solid white'
-    console.log(compGuess)
     if (user.grid[parseInt(compGuess)]) {
       userInstructions.innerHTML = 'Hit!'
       const currentHitShip = user.grid[parseInt(compGuess)].numberInArray
@@ -415,17 +437,18 @@ window.addEventListener('DOMContentLoaded', () => {
       huntingMode = true
       successfulHit = compGuess
       huntingTally += 1
-      console.log('hit')
-      console.log(huntingMode)
-      console.log(`successful hit: ${successfulHit}`)
-      console.log(`hunting tally: ${huntingTally}`)
-      console.log(`hunting tally: ${fixedHuntingDirection}`)
       if (huntingTally === 1) {
         originalSuccessfulHit = compGuess
       }
       if (huntingTally > 1) {
         fixedHuntingDirection = huntingDirection
       }
+      console.log('hit')
+      // console.log(huntingMode)
+      // console.log(`successful hit: ${successfulHit}`)
+      // console.log(`hunting tally: ${huntingTally}`)
+      // console.log(`original successful hit: ${originalSuccessfulHit}`)
+      // console.log(`fixed hunting direction: ${fixedHuntingDirection}`)
       if (user.ships[currentHitShip].hp === 0) {
         userInstructions.innerHTML = `They sunk your ${user.ships[currentHitShip].type}!`
         shipDown(currentHitShip, user)
