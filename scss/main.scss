@@ -8,9 +8,9 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  max-height: 100vh;
+  height: 100vh;
+
   overflow: hidden;
-  overflow-y: hidden;
   font-family: 'Cinzel', serif;
 }
 
@@ -93,11 +93,12 @@ body {
   max-height: 380px;
 }
 
-// .instructions {
-//     position: absolute;
-//     bottom: 0px;
-//     left: 30%;
-// }
+.instructions {
+  background-color: rgba(0,0,0, 0.0);
+  position:absolute;
+     bottom:0;
+     width:100%;
+}
 
 
 .axis {
@@ -119,8 +120,36 @@ body {
 }
 
 .animated {
-   -webkit-animation-duration: 1s;
-   animation-duration: 1s;
-   -webkit-animation-fill-mode: both;
-   animation-fill-mode: both;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.intro {
+  z-index: +2; position: absolute;
+  margin: auto;
+  left: 0; top: 80px; right: 0;
+  max-width: 80%;
+  .intro-div {
+    display: flex-wrap;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      flex-direction: row;
+
+      padding: 100px;
+    height: 600px;
+    background-color:rgba(0,0,0, 0.9);
+    -webkit-box-shadow: 0px 0px 30px 14px rgba(255,255,255,1);
+    -moz-box-shadow: 0px 0px 30px 14px rgba(255,255,255,1);
+    box-shadow: 0px 0px 30px 14px rgba(255,255,255,1);
+    color: white;
+    font-size: 26px;
+    .winter {
+      color: #AA0000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
 }
