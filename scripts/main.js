@@ -76,7 +76,7 @@ window.addEventListener('DOMContentLoaded', () => {
   function setup() {
 
     user = new Player('user', 'You')
-    comp = new Player('comp', 'The Computer')
+    comp = new Player('comp', 'The White Walkers')
 
     players.push(user, comp)
 
@@ -118,7 +118,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < player.ships.length; i++) {
       newShipDiv[i] = document.createElement('div')
       newShipDiv[i].setAttribute('class', `ship-div ${player.ships[i].id}-div`)
-      newShipDiv[i].innerHTML = `<img src="${player.ships[i].horiztonalImage}" class="${player.type}-ship ${player.ships[i].id}" data-id="${i}">`
+      newShipDiv[i].innerHTML = `<img src="${player.ships[i].horiztonalImage}" class="${player.type}-ship ${player.ships[i].id}" data-id="${i}" title="${player.ships[i].id}">`
       newShipDiv[i].addEventListener('click', userSelection)
       ships.appendChild(newShipDiv[i])
     }
@@ -347,7 +347,7 @@ window.addEventListener('DOMContentLoaded', () => {
         addVerticalArrayData(e.target.dataset.id, user)
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else {
-        instructionsText.innerHTML = 'Invalid Placement - Choose Defense Again'
+        instructionsText.innerHTML = 'You Know Nothing - Choose Defense'
       }
     }
     console.log(user.ships[currentShip].occupiedSpaces)
@@ -403,12 +403,14 @@ window.addEventListener('DOMContentLoaded', () => {
     if (playerType.ships[parseInt(currentShip)].axis === 'Horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i}`)
-        currentShipDown.style.background = 'red'
+        currentShipDown.style.removeProperty("background-color")
+        currentShipDown.innerHTML = `<img src="images/fire.png" class="animated shake">`
       }
     } else {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i * 10}`)
-        currentShipDown.style.background = 'red'
+        currentShipDown.style.removeProperty("background-color")
+        currentShipDown.innerHTML = `<img src="images/fire.png" class="animated shake">`
       }
     }
   }
@@ -423,7 +425,8 @@ window.addEventListener('DOMContentLoaded', () => {
   function hittingShip(e, playerType, position) {
     playerType.ships[parseInt(e)].hp -= 1
     playerType.totalHp -= 1
-    document.querySelector(`#${playerType.type}-${position}`).style.border = '2px solid red'
+    document.querySelector(`#${playerType.type}-${position}`).style.background = 'red'
+    // document.querySelector(`#${playerType.type}-${position}`).innerHTML = `<img src="images/fire.png">`
   }
 
   function playerTurn() {
@@ -444,9 +447,8 @@ window.addEventListener('DOMContentLoaded', () => {
     const compDiv = document.querySelectorAll('.comp-div')
     compDiv.forEach(div => div.removeEventListener('click', playerGuess))
     compDiv[parseInt(e.target.dataset.id)].setAttribute('class', 'comp-div comp-dead-div grid-div')
-    compDiv[parseInt(e.target.dataset.id)].style.border = '2px solid black'
     if (e.target.dataset.shipid !== undefined) {
-      compInstructions.innerHTML = 'Hit!'
+      compInstructions.innerHTML = `<div class="animated shake hit">Hit!</div>`
       hittingShip(e.target.dataset.shipid, comp, parseInt(e.target.dataset.id))
       if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
         compInstructions.innerHTML = `You destroyed their ${comp.ships[parseInt(e.target.dataset.shipid)].type}!`
@@ -458,7 +460,8 @@ window.addEventListener('DOMContentLoaded', () => {
       return playerTurn()
     } else {
       compInstructions.innerHTML = 'Miss!'
-      instructionsText.innerHTML = 'Computer\'s turn'
+      instructionsText.innerHTML = 'Enemy\'s turn'
+      compDiv[parseInt(e.target.dataset.id)].innerHTML = `<img src="images/smoke.png">`
       setTimeout(computerGuess, 1000)
       // instructions.addEventListener('click', computerGuess)
     }
@@ -528,10 +531,9 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
-    userDiv[parseInt(compGuess)].style.border = '2px solid black'
     console.log(`comp guess ${compGuess}`)
     if (userDiv[parseInt(compGuess)].getAttribute('data-shipid')) {
-      userInstructions.innerHTML = 'Hit!'
+      userInstructions.innerHTML = `<div class="animated shake hit">Hit!</div>`
       const currentHitShip = user.grid[parseInt(compGuess)].numberInArray
       hittingShip(currentHitShip, user, parseInt(compGuess))
       huntingMode = true
@@ -561,6 +563,7 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       userInstructions.innerHTML = 'Miss!'
       console.log('miss')
+      userDiv[parseInt(compGuess)].innerHTML = `<img src="images/smoke.png">`
     }
     playerTurn()
   }
