@@ -86,7 +86,7 @@ window.addEventListener('DOMContentLoaded', () => {
         const battleship = new Ship('Dragon', 'dragon', 4, 4, 6, 69, 'images/dragon-horizontal.png','images/dragon-vertical.png', 1)
         const submarine = new Ship('Archers', 'archers', 3, 3, 7, 79, 'images/archers-horizontal.png','images/archers-vertical.png', 2)
         const destroyer = new Ship('Knights', 'knights', 3, 3, 7, 79, 'images/knights-horizontal.png','images/knights-vertical.png', 3)
-        const patrolBoat = new Ship('Giant', 'giant', 2, 2, 8, 89, 'images/giant-horizontal.png','images/giant-vertical.png', 4)
+        const patrolBoat = new Ship('Wolves', 'wolves', 2, 2, 8, 89, 'images/wolves-horizontal.png','images/wolves-vertical.png', 4)
         players[i].ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
       }
     }
@@ -362,7 +362,8 @@ window.addEventListener('DOMContentLoaded', () => {
     if (user.ships[0].position.length > 0 && user.ships[1].position.length > 0 && user.ships[2].position.length > 0 && user.ships[3].position.length > 0 && user.ships[4].position.length > 0) {
       instructionsText.innerHTML = 'Play Game!'
       instructions.style.cursor = 'pointer'
-      instructions.addEventListener('click', playerTurn)
+      // instructions.addEventListener('click', playerTurn)
+      playerTurn()
       console.log(user.grid)
     }
   }
@@ -413,9 +414,10 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function gameOver(playerType) {
-    instructionsText.innerHTML = `${playerType.referenceName} Won the Game!`
+    instructionsText.innerHTML = `${playerType.referenceName} Won the Game! Play Again?`
     compInstructions.innerHTML = `${playerType.referenceName} Won!`
     userInstructions.innerHTML = `${playerType.referenceName} Won!`
+    instructionsText.addEventListener('click', () => window.location.reload())
   }
 
   function hittingShip(e, playerType, position) {
