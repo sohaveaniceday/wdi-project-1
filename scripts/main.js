@@ -118,7 +118,7 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < player.ships.length; i++) {
       newShipDiv[i] = document.createElement('div')
       newShipDiv[i].setAttribute('class', `ship-div ${player.ships[i].id}-div`)
-      newShipDiv[i].innerHTML = `<img src="${player.ships[i].horiztonalImage}" class="${player.type}-ship ${player.ships[i].id}" data-id="${i}" title="${player.ships[i].id}">`
+      newShipDiv[i].innerHTML = `<img src="${player.ships[i].horiztonalImage}" class="${player.type}-ship ${player.ships[i].id}" data-id="${i}" title="${player.ships[i].id}" draggable="true">`
       newShipDiv[i].addEventListener('click', userSelection)
       ships.appendChild(newShipDiv[i])
     }
@@ -347,7 +347,7 @@ window.addEventListener('DOMContentLoaded', () => {
         addVerticalArrayData(e.target.dataset.id, user)
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else {
-        instructionsText.innerHTML = 'You Know Nothing - Choose Defense'
+        instructionsText.innerHTML = 'You Know Nothing - Choose Again'
       }
     }
     console.log(user.ships[currentShip].occupiedSpaces)
@@ -416,10 +416,10 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function gameOver(playerType) {
-    instructionsText.innerHTML = `${playerType.referenceName} Won the Game! Play Again?`
+    instructionsText.innerHTML = `${playerType.referenceName} Won! Play Again?`
     compInstructions.innerHTML = `${playerType.referenceName} Won!`
     userInstructions.innerHTML = `${playerType.referenceName} Won!`
-    instructionsText.addEventListener('click', () => window.location.reload())
+    instructions.addEventListener('click', () => window.location.reload())
   }
 
   function hittingShip(e, playerType, position) {
@@ -461,7 +461,7 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       compInstructions.innerHTML = 'Miss!'
       instructionsText.innerHTML = 'Enemy\'s turn'
-      compDiv[parseInt(e.target.dataset.id)].innerHTML = `<img src="images/smoke.png">`
+      compDiv[parseInt(e.target.dataset.id)].style.background = '#D3D3D3'
       setTimeout(computerGuess, 1000)
       // instructions.addEventListener('click', computerGuess)
     }
@@ -563,7 +563,7 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       userInstructions.innerHTML = 'Miss!'
       console.log('miss')
-      userDiv[parseInt(compGuess)].innerHTML = `<img src="images/smoke.png">`
+      userDiv[parseInt(compGuess)].style.background = '#D3D3D3'
     }
     playerTurn()
   }
