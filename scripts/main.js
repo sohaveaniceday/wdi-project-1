@@ -82,11 +82,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function shipBuilding() {
       for (let i = 0; i < players.length; i++) {
-        const aircraftCarrier = new Ship('Aircraft Carrier', 'aircraft-carrier', 5, 5, 5, 59, 'images/aircraft-carrier-horizontal.png','images/aircraft-carrier-vertical.png', 0)
-        const battleship = new Ship('Battleship', 'battleship', 4, 4, 6, 69, 'images/battleship-horizontal.png','images/battleship-vertical.png', 1)
-        const submarine = new Ship('Submarine', 'submarine', 3, 3, 7, 79, 'images/submarine-horizontal.png','images/submarine-vertical.png', 2)
-        const destroyer = new Ship('Destroyer', 'destroyer', 3, 3, 7, 79, 'images/destroyer-horizontal.png','images/destroyer-vertical.png', 3)
-        const patrolBoat = new Ship('Patrol Boat', 'patrol-boat', 2, 2, 8, 89, 'images/patrol-boat-horizontal.png','images/patrol-boat-vertical.png', 4)
+        const aircraftCarrier = new Ship('Fort', 'fort', 5, 5, 5, 59, 'images/fort-horizontal.png','images/fort-vertical.png', 0)
+        const battleship = new Ship('Dragon', 'dragon', 4, 4, 6, 69, 'images/dragon-horizontal.png','images/dragon-vertical.png', 1)
+        const submarine = new Ship('Archers', 'archers', 3, 3, 7, 79, 'images/archers-horizontal.png','images/archers-vertical.png', 2)
+        const destroyer = new Ship('Knights', 'knights', 3, 3, 7, 79, 'images/knights-horizontal.png','images/knights-vertical.png', 3)
+        const patrolBoat = new Ship('Giant', 'giant', 2, 2, 8, 89, 'images/giant-horizontal.png','images/giant-vertical.png', 4)
         players[i].ships.push(aircraftCarrier, battleship, submarine, destroyer, patrolBoat)
       }
     }
@@ -327,7 +327,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function positionSelection(e) {
     if (currentShip) {
-      instructionsText.innerHTML = 'Pick Your Boat'
+      instructionsText.innerHTML = 'Choose Your Defense'
       if (checkAcceptableHorizontal(e.target.dataset.id, user, userDirection)) {
         // clearCurrentObjectPositionArray(user)
         // if (checkIfAlreadyOnMap(user)) {
@@ -347,7 +347,7 @@ window.addEventListener('DOMContentLoaded', () => {
         addVerticalArrayData(e.target.dataset.id, user)
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else {
-        instructionsText.innerHTML = 'Invalid Placement. Select Boat Again.'
+        instructionsText.innerHTML = 'Invalid Placement - Choose Defense Again'
       }
     }
     console.log(user.ships[currentShip].occupiedSpaces)
@@ -396,6 +396,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Game logic
 
+  //
+
   function shipDown(currentShip, playerType) {
     if (playerType.ships[parseInt(currentShip)].axis === 'Horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
@@ -440,12 +442,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const compDiv = document.querySelectorAll('.comp-div')
     compDiv.forEach(div => div.removeEventListener('click', playerGuess))
     compDiv[parseInt(e.target.dataset.id)].setAttribute('class', 'comp-div comp-dead-div grid-div')
-    compDiv[parseInt(e.target.dataset.id)].style.border = '2px solid white'
+    compDiv[parseInt(e.target.dataset.id)].style.border = '2px solid black'
     if (e.target.dataset.shipid !== undefined) {
       compInstructions.innerHTML = 'Hit!'
       hittingShip(e.target.dataset.shipid, comp, parseInt(e.target.dataset.id))
       if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
-        compInstructions.innerHTML = `You sunk their ${comp.ships[parseInt(e.target.dataset.shipid)].type}!`
+        compInstructions.innerHTML = `You destroyed their ${comp.ships[parseInt(e.target.dataset.shipid)].type}!`
         shipDown(e.target.dataset.shipid, comp)
         if (comp.totalHp === 0) {
           return gameOver(user)
@@ -524,7 +526,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
-    userDiv[parseInt(compGuess)].style.border = '2px solid white'
+    userDiv[parseInt(compGuess)].style.border = '2px solid black'
     console.log(`comp guess ${compGuess}`)
     if (userDiv[parseInt(compGuess)].getAttribute('data-shipid')) {
       userInstructions.innerHTML = 'Hit!'
@@ -541,7 +543,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
       console.log('hit')
       if (user.ships[currentHitShip].hp === 0) {
-        userInstructions.innerHTML = `They sunk your ${user.ships[currentHitShip].type}!`
+        userInstructions.innerHTML = `They destroyed your ${user.ships[currentHitShip].type}!`
         console.log(user.ships[currentHitShip].occupiedSpaces)
         compGuessArray = compGuessArray.concat(user.ships[currentHitShip].occupiedSpaces)
         console.log(compGuessArray)
