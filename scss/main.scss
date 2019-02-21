@@ -19,7 +19,7 @@ body {
 }
 
 .hit {
-  color: red;
+  color: #AA0000;
 }
 
 .container {
@@ -73,6 +73,12 @@ body {
   }
 }
 
+.ship-div {
+  img {
+    cursor: pointer;
+  }
+}
+
 .night-king-figure {
   position: absolute;
   right: -100px;
@@ -82,7 +88,7 @@ body {
 
 .jon-snow-figure {
   position: absolute;
-  left: -200px;
+  left: -240px;
   bottom: 0px;
   max-height: 380px;
 }

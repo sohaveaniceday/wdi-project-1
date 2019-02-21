@@ -117,7 +117,7 @@ window.addEventListener('DOMContentLoaded', () => {
   function addBoats(player, ships) {
     for (let i = 0; i < player.ships.length; i++) {
       newShipDiv[i] = document.createElement('div')
-      newShipDiv[i].setAttribute('class', `ship-div ${player.ships[i].id}-div`)
+      newShipDiv[i].setAttribute('class', `ship-div ${player.ships[i].id}-div ${player.type}-${player.ships[i].id}-div`)
       newShipDiv[i].innerHTML = `<img src="${player.ships[i].horiztonalImage}" class="${player.type}-ship ${player.ships[i].id}" data-id="${i}" title="${player.ships[i].id}" draggable="true">`
       newShipDiv[i].addEventListener('click', userSelection)
       ships.appendChild(newShipDiv[i])
@@ -397,26 +397,29 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // Game logic
 
-  //
+  //game logic functions
 
   function shipDown(currentShip, playerType) {
+    document.querySelector(`.${playerType.type}-${playerType.ships[currentShip].id}-div`).innerHTML = `<img src="images/${playerType.ships[currentShip].id}-horizontal-black.png">`
     if (playerType.ships[parseInt(currentShip)].axis === 'Horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i}`)
-        currentShipDown.style.removeProperty("background-color")
-        currentShipDown.innerHTML = `<img src="images/fire.png" class="animated shake">`
+        currentShipDown.style.removeProperty('background-color')
+        currentShipDown.innerHTML = '<img src="images/fire.png" class="animated shake">'
       }
     } else {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i * 10}`)
-        currentShipDown.style.removeProperty("background-color")
-        currentShipDown.innerHTML = `<img src="images/fire.png" class="animated shake">`
+        currentShipDown.style.removeProperty('background-color')
+        currentShipDown.innerHTML = '<img src="images/fire.png" class="animated shake">'
       }
     }
   }
 
   function gameOver(playerType) {
-    instructionsText.innerHTML = `${playerType.referenceName} Won! Play Again?`
+    userInstructions.style.color = '#AA0000'
+    compInstructions.style.color = '#AA0000'
+    instructionsText.innerHTML = 'Play Again?'
     compInstructions.innerHTML = `${playerType.referenceName} Won!`
     userInstructions.innerHTML = `${playerType.referenceName} Won!`
     instructions.addEventListener('click', () => window.location.reload())
@@ -425,9 +428,11 @@ window.addEventListener('DOMContentLoaded', () => {
   function hittingShip(e, playerType, position) {
     playerType.ships[parseInt(e)].hp -= 1
     playerType.totalHp -= 1
-    document.querySelector(`#${playerType.type}-${position}`).style.background = 'red'
+    document.querySelector(`#${playerType.type}-${position}`).style.background = '#AA0000'
     // document.querySelector(`#${playerType.type}-${position}`).innerHTML = `<img src="images/fire.png">`
   }
+
+  //Player logic
 
   function playerTurn() {
     userInstructions.removeEventListener('click', axisSelector)
@@ -443,6 +448,7 @@ window.addEventListener('DOMContentLoaded', () => {
     compActiveDiv.forEach(div => div.addEventListener('click', playerGuess))
   }
   function playerGuess(e) {
+    userInstructions.style.color = 'black'
     userInstructions.innerHTML = 'Waiting'
     const compDiv = document.querySelectorAll('.comp-div')
     compDiv.forEach(div => div.removeEventListener('click', playerGuess))
@@ -451,6 +457,7 @@ window.addEventListener('DOMContentLoaded', () => {
       compInstructions.innerHTML = `<div class="animated shake hit">Hit!</div>`
       hittingShip(e.target.dataset.shipid, comp, parseInt(e.target.dataset.id))
       if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
+        compInstructions.style.color = '#AA0000'
         compInstructions.innerHTML = `You destroyed their ${comp.ships[parseInt(e.target.dataset.shipid)].type}!`
         shipDown(e.target.dataset.shipid, comp)
         if (comp.totalHp === 0) {
@@ -467,7 +474,10 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  //Comp logic
+
   function computerGuess() {
+    compInstructions.style.color = 'black'
     compInstructions.innerHTML = 'Waiting'
     instructions.removeEventListener('click', computerGuess)
     if (huntingMode === true) {
@@ -547,6 +557,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
       console.log('hit')
       if (user.ships[currentHitShip].hp === 0) {
+        userInstructions.style.color = '#AA0000'
         userInstructions.innerHTML = `They destroyed your ${user.ships[currentHitShip].type}!`
         console.log(user.ships[currentHitShip].occupiedSpaces)
         compGuessArray = compGuessArray.concat(user.ships[currentHitShip].occupiedSpaces)
