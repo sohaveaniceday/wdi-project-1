@@ -106,7 +106,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const intro = document.querySelector('.intro')
     const introPage = document.createElement('div')
     introPage.setAttribute('class', 'intro-div box has-text-centered is-vcentered')
-    introPage.innerHTML = '"Night gathers, and now my watch begins..." <br><br>You are the Lord Commander of the Night\'s Watch. Help Jon Snow from the terrors beyond the wall by strategically placing your defenses. Make sure they are not touching and there is enough space in the battle area. If you manage to strike down all your enemy\'s defenses before them you will have won the day. <br><br>Prepare. <span class="winter">Winter is coming...</span>'
+    introPage.innerHTML = '"Night gathers, and now my watch begins..." <br><br>You are the Lord Commander of the Night\'s Watch. Help Jon Snow from the terrors beyond the wall by strategically placing your defenses. Make sure they are not touching and there is enough space in the battle area. If you manage to strike down all your enemy\'s defenses before them you will have won the day. <br><br>Prepare. <span class="winter animated fadeInUp">Winter is coming...</span>'
     intro.appendChild(introPage)
     document.querySelector('.winter').addEventListener('click', removeIntroDiv)
   }

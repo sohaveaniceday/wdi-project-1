@@ -150,6 +150,9 @@ body {
       color: #AA0000;
       font-weight: bold;
       cursor: pointer;
+      animation-delay: 0.5s;
+      -webkit-animation-duration: 2s;
+      animation-duration: 2s;
     }
   }
 }
