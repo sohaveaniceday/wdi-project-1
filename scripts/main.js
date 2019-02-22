@@ -6,7 +6,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const newShipDiv = []
 
   const players = []
-  const directionArray = ['Horizontal', 'Vertical']
+  const directionArray = ['horizontal', 'vertical']
 
   let user = null
   let comp = null
@@ -148,11 +148,11 @@ window.addEventListener('DOMContentLoaded', () => {
   // Boat Selections Functions
 
   function axisSelector() {
-    if (userInstructions.innerHTML === 'Vertical') {
-      userInstructions.innerHTML = 'Horizontal'
+    if (userInstructions.innerHTML === 'vertical') {
+      userInstructions.innerHTML = 'horizontal'
       userDirection = directionArray[0]
     } else {
-      userInstructions.innerHTML = 'Vertical'
+      userInstructions.innerHTML = 'vertical'
       userDirection = directionArray[1]
     }
   }
@@ -165,7 +165,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function checkAcceptableHorizontal(e, playerType, direction) {
-    if (direction === 'Horizontal' && e.substr(e.length - 1) !== '9' && e.substr(e.length - 1) <= playerType.ships[currentShip].maxHoriztonal && checkHoriztonalOccupied(e, playerType)) {
+    if (direction === 'horizontal' && e.substr(e.length - 1) !== '9' && e.substr(e.length - 1) <= playerType.ships[currentShip].maxHoriztonal && checkHoriztonalOccupied(e, playerType)) {
       return true
     }
   }
@@ -180,7 +180,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function checkAcceptableVertical(e, playerType, direction) {
-    if (direction === 'Vertical' && e <= playerType.ships[currentShip].maxVertical && checkVerticalOccupied(e, playerType)) {
+    if (direction === 'vertical' && e <= playerType.ships[currentShip].maxVertical && checkVerticalOccupied(e, playerType)) {
       return true
     }
   }
@@ -226,18 +226,18 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   function addCompImageToGrid(e, playerType, position) {
-    if (position === 'Horizontal') {
+    if (position === 'horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         // document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
       }
-      playerType.ships[parseInt(currentShip)].axis = 'Horizontal'
+      playerType.ships[parseInt(currentShip)].axis = 'horizontal'
     } else {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
       }
-      playerType.ships[parseInt(currentShip)].axis = 'Vertical'
+      playerType.ships[parseInt(currentShip)].axis = 'vertical'
     }
   }
 
@@ -288,7 +288,7 @@ window.addEventListener('DOMContentLoaded', () => {
       playerType.grid[parseInt(e) + i] = playerType.ships[currentShip]
       document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
     }
-    playerType.ships[parseInt(currentShip)].axis = 'Horizontal'
+    playerType.ships[parseInt(currentShip)].axis = 'horizontal'
     console.log(playerType.ships[currentShip].occupiedSpaces)
   }
 
@@ -353,7 +353,7 @@ window.addEventListener('DOMContentLoaded', () => {
         // if (checkIfAlreadyOnMap(user)) {
         //   clearImageAlreadyOnMap(user)
         // }
-        addImageToGrid(e.target.dataset.id, user, 'Horizontal')
+        addImageToGrid(e.target.dataset.id, user, 'horizontal')
         // clearExistingArrayPosition(user)
         addHoriztonalArrayData(e.target.dataset.id, user)
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
@@ -362,7 +362,7 @@ window.addEventListener('DOMContentLoaded', () => {
         // if (checkIfAlreadyOnMap(user)) {
         //   clearImageAlreadyOnMap(user)
         // }
-        addImageToGrid(e.target.dataset.id, user, 'Vertical')
+        addImageToGrid(e.target.dataset.id, user, 'vertical')
         // clearExistingArrayPosition(user)
         addVerticalArrayData(e.target.dataset.id, user)
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
@@ -394,20 +394,20 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < user.ships.length; i++) {
       const compDirection = directionArray[Math.floor(Math.random() * 2)]
       currentShip = i
-      if (compDirection === 'Horizontal') {
+      if (compDirection === 'horizontal') {
         do {
           compGridPosition = (Math.floor(Math.random() * 100)).toString()
         }
         while (checkAcceptableHorizontal(compGridPosition, comp, compDirection) === undefined)
         addHoriztonalArrayData(compGridPosition, comp)
         // addImageToGrid(compGridPosition, comp, compDirection)
-        addCompImageToGrid(compGridPosition, comp, 'Horizontal')
-      } else if (compDirection === 'Vertical') {
+        addCompImageToGrid(compGridPosition, comp, 'horizontal')
+      } else if (compDirection === 'vertical') {
         do {
           compGridPosition = (Math.floor(Math.random() * 100)).toString()
         }
         while (checkAcceptableVertical(compGridPosition, comp, compDirection) === undefined)
-        addVerticalArrayData(compGridPosition, comp, 'Vertical')
+        addVerticalArrayData(compGridPosition, comp, 'vertical')
         // addImageToGrid(compGridPosition, comp, compDirection)
         addCompImageToGrid(compGridPosition, comp)
       }
@@ -421,7 +421,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function shipDown(currentShip, playerType) {
     document.querySelector(`.${playerType.type}-${playerType.ships[currentShip].id}-div`).innerHTML = `<img src="images/${playerType.ships[currentShip].id}-horizontal-black.png">`
-    if (playerType.ships[parseInt(currentShip)].axis === 'Horizontal') {
+    if (playerType.ships[parseInt(currentShip)].axis === 'horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
         const currentShipDown = document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip]) + i}`)
         currentShipDown.style.removeProperty('background-color')
@@ -456,7 +456,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function playerTurn() {
     userInstructions.removeEventListener('click', axisSelector)
-    if (userInstructions.innerHTML === 'Horizontal' || userInstructions.innerHTML === 'Vertical') {
+    if (userInstructions.innerHTML === 'horizontal' || userInstructions.innerHTML === 'vertical') {
       userInstructions.innerHTML = 'Waiting'
       compInstructions.innerHTML = 'Waiting'
     }
@@ -505,7 +505,7 @@ window.addEventListener('DOMContentLoaded', () => {
       do {
         if (fixedHuntingDirection) {
           const compSuggestionsArray = []
-          if (fixedHuntingDirection === 'Horizontal') {
+          if (fixedHuntingDirection === 'horizontal') {
             for (let i = 0; i < 2; i++) {
               compGuess = successfulHit + huntingModeHorizontalArray[i]
               if (i === 1 && parseInt(compGuess) % 10 !== 9) {
@@ -541,7 +541,7 @@ window.addEventListener('DOMContentLoaded', () => {
           }
         } else {
           huntingDirection = directionArray[Math.floor(Math.random() * 2)]
-          if (huntingDirection === 'Horizontal') {
+          if (huntingDirection === 'horizontal') {
             compGuess = successfulHit + huntingModeHorizontalArray[Math.floor(Math.random() * 2)]
             if (parseInt(successfulHit) % 10 === 0) {
               compGuess = successfulHit + huntingModeHorizontalArray[0]
