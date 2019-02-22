@@ -289,7 +289,6 @@ window.addEventListener('DOMContentLoaded', () => {
       document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
     }
     playerType.ships[parseInt(currentShip)].axis = 'horizontal'
-    console.log(playerType.ships[currentShip].occupiedSpaces)
   }
 
   function addVerticalArrayData(e, playerType) {
@@ -338,7 +337,6 @@ window.addEventListener('DOMContentLoaded', () => {
       playerType.grid[parseInt(e) + i * 10] = playerType.ships[currentShip]
       document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
     }
-    // console.log(playerType.ships[currentShip].occupiedSpaces)
   }
 
 
@@ -370,7 +368,6 @@ window.addEventListener('DOMContentLoaded', () => {
         instructionsText.innerHTML = 'You Know Nothing - Choose Again'
       }
     }
-    console.log(user.ships[currentShip].occupiedSpaces)
     currentShip = null
     changeInstructions()
   }
@@ -384,7 +381,6 @@ window.addEventListener('DOMContentLoaded', () => {
       instructions.style.cursor = 'pointer'
       // instructions.addEventListener('click', playerTurn)
       playerTurn()
-      console.log(user.grid)
     }
   }
 
@@ -562,7 +558,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
-    console.log(`comp guess ${compGuess}`)
     if (userDiv[parseInt(compGuess)].getAttribute('data-shipid')) {
       userInstructions.innerHTML = `<div class="animated shake hit">Hit!</div>`
       const currentHitShip = user.grid[parseInt(compGuess)].numberInArray
@@ -576,13 +571,10 @@ window.addEventListener('DOMContentLoaded', () => {
       if (huntingTally > 1) {
         fixedHuntingDirection = huntingDirection
       }
-      console.log('hit')
       if (user.ships[currentHitShip].hp === 0) {
         userInstructions.style.color = '#AA0000'
         userInstructions.innerHTML = `They destroyed your ${user.ships[currentHitShip].type}!`
-        console.log(user.ships[currentHitShip].occupiedSpaces)
         compGuessArray = compGuessArray.concat(user.ships[currentHitShip].occupiedSpaces)
-        console.log(compGuessArray)
         shipDown(currentHitShip, user)
         huntingMode = false
         huntingTally = 0
@@ -594,7 +586,6 @@ window.addEventListener('DOMContentLoaded', () => {
       return setTimeout(computerGuess, 2000)
     } else {
       userInstructions.innerHTML = 'Miss!'
-      console.log('miss')
       userDiv[parseInt(compGuess)].style.background = '#D3D3D3'
     }
     playerTurn()
