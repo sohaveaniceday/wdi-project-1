@@ -106,7 +106,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const intro = document.querySelector('.intro')
     const introPage = document.createElement('div')
     introPage.setAttribute('class', 'intro-div box has-text-centered is-vcentered')
-    introPage.innerHTML = '"Night gathers, and now my watch begins..." <br><br>You are the Lord Commander of the Night\'s Watch. Help Jon Snow from the terrors beyond the wall by strategically placing your defenses. Make sure they are not touching and there is enough space in the battle area. If you manage to strike down all your enemy\'s defenses you will live to see another day. <br><br>Prepare. <span class="winter animated fadeInUp">Winter is coming...</span>'
+    introPage.innerHTML = '"Night gathers, and now my watch begins..." <br><br>You are the Lord Commander of the Night\'s Watch. Help Jon Snow from the terrors beyond the wall by strategically placing your defences. Make sure they are not touching and there is enough space in the battle area. If you manage to strike down all your enemy\'s defences you will live to see another day. <br><br>Prepare. <span class="winter animated fadeInUp">Winter is coming...</span>'
     intro.appendChild(introPage)
     document.querySelector('.winter').addEventListener('click', removeIntroDiv)
   }
@@ -116,7 +116,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const intro = document.querySelector('.intro')
     intro.removeChild(introPage)
     document.querySelector('.character-images').innerHTML = '<img class="figure night-king-figure animated slideInRight" src="images/night-king.png"><img class="figure jon-snow-figure animated slideInLeft" src="images/jon-snow.png">'
-    instructions.innerHTML = '<div class="instructions-text box title is-3 has-text-centered animated slideInUp">Choose Your Defense</div>'
+    instructions.innerHTML = '<div class="instructions-text box title is-3 has-text-centered animated slideInUp">Choose Your Defence</div>'
     instructionsText = document.querySelector('.instructions-text')
   }
   // Build Grid and Ship Functions
@@ -347,7 +347,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function positionSelection(e) {
     if (currentShip) {
-      instructionsText.innerHTML = 'Choose Your Defense'
+      instructionsText.innerHTML = 'Choose Your Defence'
       if (checkAcceptableHorizontal(e.target.dataset.id, user, userDirection)) {
         // clearCurrentObjectPositionArray(user)
         // if (checkIfAlreadyOnMap(user)) {
