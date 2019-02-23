@@ -585,6 +585,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
       return setTimeout(computerGuess, 2000)
     } else {
+      userInstructions.style.color = 'black'
       userInstructions.innerHTML = 'Miss!'
       userDiv[parseInt(compGuess)].style.background = '#D3D3D3'
     }
