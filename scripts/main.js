@@ -155,12 +155,26 @@ window.addEventListener('DOMContentLoaded', () => {
       userInstructions.innerHTML = 'vertical'
       userDirection = directionArray[1]
     }
+    const userDiv = document.querySelectorAll('.user-div')
+    if (user.ships[currentShip].id === 'fort') {
+      userDiv.forEach(div => div.style.cursor = `url('images/${user.ships[currentShip].id}-${userDirection}-cursor.png') 10 25, auto`)
+      console.log('fort')
+    } else {
+      userDiv.forEach(div => div.style.cursor = `url('images/${user.ships[currentShip].id}-${userDirection}.png') 10 25, auto`)
+    }
   }
 
   function userSelection(e) {
     if (e.target.classList.contains('user-ship')) {
       currentShip = e.target.dataset.id
       instructionsText.innerHTML = `Place Your ${user.ships[currentShip].type}`
+      const userDiv = document.querySelectorAll('.user-div')
+      if (user.ships[currentShip].id === 'fort') {
+        userDiv.forEach(div => div.style.cursor = `url('images/${user.ships[currentShip].id}-${userDirection}-cursor.png') 10 25, auto`)
+        console.log('fort')
+      } else {
+        userDiv.forEach(div => div.style.cursor = `url('images/${user.ships[currentShip].id}-${userDirection}.png') 10 25, auto`)
+      }
     }
   }
 
@@ -218,6 +232,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function addImageToGrid(e, playerType, position) {
     document.querySelector(`#${playerType.type}-${e}`).innerHTML = `<img id="image-${playerType.type}-${e}" src="images/${playerType.ships[currentShip].id}-${position}.png">`
+    const userDiv = document.querySelectorAll('.user-div')
+    userDiv.forEach(div => div.style.cursor = "pointer")
+    document.querySelector(`.user-${user.ships[currentShip].id}-div`).innerHTML = `<img src="images/${user.ships[currentShip].id}-horizontal-black.png">`
     // const newImage = document.querySelector(`#image-${playerType.type}-${e}`)
     // newImage.setAttribute('class', `${playerType.type}-div ${playerType.type}-active-div ship`)
     // newImage.setAttribute('id', `image-${playerType.type}-${e}`)
@@ -365,7 +382,9 @@ window.addEventListener('DOMContentLoaded', () => {
         addVerticalArrayData(e.target.dataset.id, user)
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else {
-        instructionsText.innerHTML = 'Invalid Placement - Choose Again'
+        instructionsText.innerHTML = 'Invalid Placement'
+        const userDiv = document.querySelectorAll('.user-div')
+        userDiv.forEach(div => div.style.cursor = 'pointer')
       }
     }
     currentShip = null
@@ -377,10 +396,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function changeInstructions() {
     if (user.ships[0].position.length > 0 && user.ships[1].position.length > 0 && user.ships[2].position.length > 0 && user.ships[3].position.length > 0 && user.ships[4].position.length > 0) {
+      instructionsText.style.color = '#AA0000'
       instructionsText.innerHTML = 'Play Game!'
       instructions.style.cursor = 'pointer'
-      // instructions.addEventListener('click', playerTurn)
-      playerTurn()
+      instructions.addEventListener('click', playerTurn)
+      for (let i = 0; i < user.ships.length; i++) {
+        const shipDiv = document.querySelector(`.user-${user.ships[i].id}-div`)
+        userShips.removeChild(shipDiv)
+      }
+      addBoats(user, userShips)
     }
   }
 
@@ -451,6 +475,7 @@ window.addEventListener('DOMContentLoaded', () => {
   //Player logic
 
   function playerTurn() {
+    instructionsText.style.color = 'black'
     userInstructions.removeEventListener('click', axisSelector)
     if (userInstructions.innerHTML === 'horizontal' || userInstructions.innerHTML === 'vertical') {
       userInstructions.innerHTML = 'Waiting'
