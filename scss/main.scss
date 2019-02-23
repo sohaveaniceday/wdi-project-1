@@ -161,6 +161,9 @@ body {
 
 @media only screen and (max-width: 1076px) {
 
+  body {
+    overflow: auto;
+  }
   .night-king-figure {
     display: none;
   }
