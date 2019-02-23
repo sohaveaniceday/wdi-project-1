@@ -365,7 +365,7 @@ window.addEventListener('DOMContentLoaded', () => {
         addVerticalArrayData(e.target.dataset.id, user)
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else {
-        instructionsText.innerHTML = 'You Know Nothing - Choose Again'
+        instructionsText.innerHTML = 'Invalid Placement - Choose Again'
       }
     }
     currentShip = null
