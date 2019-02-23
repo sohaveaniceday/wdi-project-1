@@ -136,4 +136,17 @@ body {
       -webkit-animation-duration: 2s;
       animation-duration: 2s; }
 
+@media only screen and (max-width: 1076px) {
+  .night-king-figure {
+    display: none; }
+
+  .jon-snow-figure {
+    display: none; }
+
+  .instructions {
+    position: relative; }
+
+  .intro .intro-div {
+    font-size: 18px; } }
+
 /*# sourceMappingURL=style.css.map */

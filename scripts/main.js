@@ -470,7 +470,7 @@ window.addEventListener('DOMContentLoaded', () => {
     compDiv.forEach(div => div.removeEventListener('click', playerGuess))
     compDiv[parseInt(e.target.dataset.id)].setAttribute('class', 'comp-div comp-dead-div grid-div')
     if (e.target.dataset.shipid !== undefined) {
-      compInstructions.innerHTML = `<div class="animated shake hit">Hit!</div>`
+      compInstructions.innerHTML = '<div class="animated shake hit">Hit!</div>'
       hittingShip(e.target.dataset.shipid, comp, parseInt(e.target.dataset.id))
       if (comp.ships[parseInt(e.target.dataset.shipid)].hp === 0) {
         compInstructions.style.color = '#AA0000'
@@ -559,7 +559,7 @@ window.addEventListener('DOMContentLoaded', () => {
     compGuessArray.push(compGuess)
     const userDiv = document.querySelectorAll('.user-div')
     if (userDiv[parseInt(compGuess)].getAttribute('data-shipid')) {
-      userInstructions.innerHTML = `<div class="animated shake hit">Hit!</div>`
+      userInstructions.innerHTML = '<div class="animated shake hit">Hit!</div>'
       const currentHitShip = user.grid[parseInt(compGuess)].numberInArray
       hittingShip(currentHitShip, user, parseInt(compGuess))
       huntingMode = true
@@ -596,7 +596,5 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setup()
   compSelection()
-
-
 
 })

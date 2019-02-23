@@ -99,8 +99,8 @@ body {
 .instructions {
   background-color: rgba(0,0,0, 0.0);
   position:absolute;
-     bottom:0;
-     width:100%;
+  bottom:0;
+  width:100%;
 }
 
 
@@ -136,12 +136,11 @@ body {
   max-width: 80%;
   .intro-div {
     display: flex-wrap;
-      align-items: center;
-      text-align: center;
-      justify-content: center;
-      flex-direction: row;
-
-      padding: 100px;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    flex-direction: row;
+    padding: 100px;
     height: 600px;
     background-color:rgba(0,0,0, 0.9);
     -webkit-box-shadow: 0px 0px 30px 14px rgba(255,255,255,1);
@@ -156,6 +155,24 @@ body {
       animation-delay: 1s;
       -webkit-animation-duration: 2s;
       animation-duration: 2s;
+    }
+  }
+}
+
+@media only screen and (max-width: 1076px) {
+
+  .night-king-figure {
+    display: none;
+  }
+  .jon-snow-figure {
+    display: none;
+  }
+  .instructions {
+    position: relative;
+  }
+  .intro {
+    .intro-div {
+      font-size: 18px;
     }
   }
 }
