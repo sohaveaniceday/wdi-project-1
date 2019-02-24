@@ -1,12 +1,12 @@
 # General Assembly SEI Project 1: Battle of the Wall
 
-[GitHub Pages](https://sohaveaniceday.github.io/wdi-project-1/)
+[Portfolio Link](https://www.richard-turner.com/wdi-project-1/)
 
 [GitHub Repo](https://github.com/sohaveaniceday/wdi-project-1)
 
-Battle of the Wall was my first project from General Assembly's Software Engineering Immersive course. It was an individual project built in a week, and was both my first game I had built and my first full project using Vanilla JavaScript, having only been studying it for two weeks.
+Battle of the Wall was my first project from General Assembly's Software Engineering Immersive course. It was an individual project built in just over a week, and was both my first game I had built and my first full project using Vanilla JavaScript, having only been studying it for two weeks.
 
-Battle of the Wall is a Game of Thrones-themed variation on the classic game Battleships, a one-player game against the computer where the player and CPU covertly lay out their defences on separate game boards. The player then takes it in turns with the CPU to try and hit each other's defence squares. Once a player has destroyed all of their opponent's defences they have won the game.
+Battle of the Wall is a Game of Thrones-themed variation on the classic game Battleships, a one-player game against the computer where the player and CPU covertly lay out their defences on separate game boards. The players then takes it in turns to try and guess each other's defence squares. Once a player has destroyed all of their opponent's defences they have won the game.
 
 ___
 
@@ -23,7 +23,7 @@ I had to:
 
 Additional enhancements:
 
-* **Create CPU logic that intelligently hunts down the human player's defences**
+* **Create CPU logic** that intelligently hunts down the human player's defences
 * **Add responsive design**
 
 ---
@@ -34,6 +34,7 @@ Additional enhancements:
 * CSS3 (with animate.CSS)
 * Sass
 * Bulma
+* Felxbox
 * Vanilla JavaScript (ECMAScript6)
 * Git
 * GitHub
@@ -52,11 +53,11 @@ Additional enhancements:
 
 ![game start](screenshots/game-start.png)
 
-### After the player has laid down their defences on the game board, play can commence
+### Once the human player has laid down their defences on the game board, play can commence
 
 ![game setup](screenshots/game-setup.png)
 
-### Players then take it in turn to hit each other's defences. If they hit, they get another go
+### Players then take it in turn to guess each other's defence squares. If they hit, they get another go
 
 ![game turns](screenshots/game-turns.png)
 
@@ -70,30 +71,31 @@ ___
 
 ### Functionality
 
-It was a 10x10 grid based game so I knew I had to create 2 blank arrays. Using a javascript loop I created 100 divs for each array with the value of null. 
+It was a 10x10 grid based game so I knew I had to create 2 blank arrays. Using a javascript loop and flexbox I created 100 divs for each array with the value of null.
 
-To begin the project I started work on my grid. I created a for loop that would use jQuery to create hundreds of numbered divs on my page and then it "cut out" the middle section I wanted to use. This gave me the grid size i wanted with each square having its own identifier number within it and meant that numbers at the edge of the grid weren't consecutive with numbers on the opposite side. This was intentional to stop movement over the edge of my map.
+Using Javascript classes for both the players and the ships allowed me to efficiently store key information (i.e. ship hp points, player's remaining ships etc.) that could be accessed easily throughout the code.
 
-I then used objects to store the stats and location of my characters and worked on functions to handle their movement and attacks using the identifier numbers of my grid. All of this is controlled with the mouse and any changes that take place change the data in each characters object.
+The next challenge was to allow both the human and CPU player to lay down their choices, abiding by the rules of Battleships - defences should stay within the game board and shouldn't be touching. Using various 'checker' functions for both horizontal and vertical placement, this allowed both players to lay down their defences without any logic conflicts.
+
+The actual game logic posed a few challenges, namely the computer AI that would have to guess human squares smartly, abiding by the rules of battleships. For instance, if a defence had been destroyed, it should ignore all other squares touching that defence as no other defence would be present there. It should also logically hunt subsequent squares once it makes an initial hit.
+
+Once all defences had been destroyed the game should then display the winner and give an option to play again.
 
 #### Featured piece of code 1
 
-This piece of code generates the grid and numbers the squares accordingly. The large if statement selects the grid squares I wanted to keep for my game board. Further in my code all of the 'not-enterable' divs are removed from the page.
+This piece of code generates the grid and numbers the squares accordingly. It allows for both the human player and CPU player to share the same function and label them appropriately using HTML classes and ID's, so they can be easily referred to later in the game. It also allows the human player to start laying down their defences on the game board using the addEventListener functionality.
 
 ``` JavaScript
-for(let i = 1; i < 600 ; i++){
-  const $newDiv = $('<div></div>').addClass('not-enterable');
-  $container.append($newDiv);
-  if (i > 125 && i < 145 || i > 155 && i < 174 || i > 185 && i < 204 || i > 215 && i < 234
-    || i > 245 && i < 264 || i > 275 && i < 294 || i > 305 && i < 324 || i > 335 && i < 354
-    || i > 365 && i < 384 || i > 395 && i < 414 || i > 425 && i < 444 || i > 455 && i < 474){
-    $newDiv.attr('class', 'grid-square');
-    $newDiv.html(i);
+function buildGrid(grid, player) {
+  for (let i = 0; i < player.grid.length; i++) {
+    newGridDiv[i] = document.createElement('div')
+    newGridDiv[i].setAttribute('class', `${player.type}-div ${player.type}-active-div grid-div`)
+    newGridDiv[i].setAttribute('id', `${player.type}-${i}`)
+    newGridDiv[i].setAttribute('data-id', i)
+    grid.appendChild(newGridDiv[i])
   }
-  if(i < 154 || i > 445){
-    $newDiv.attr('class', 'not-enterable');
-    $newDiv.html('');
-  }
+  const userDiv = document.querySelectorAll('.user-div')
+  userDiv.forEach(div => div.addEventListener('click', positionSelection))
 }
 ```
 ### MVP
@@ -109,28 +111,37 @@ At this point in production I had only done minimal styling and had mainly focus
 
 #### Featured piece of code 2
 
-This piece of code was the styling for my explosion div which is placed on the page when a fireball spell is cast.
+The below Sass code is the styling of the intro prologue page giving the player some background story. The shadow effects and animation for .winter are particularly effective for creating a compelling intro.
 
-``` CSS
-#explosion{
-  animation: tada 2s infinite;
-  background-image: url(images/boom.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  height: 200px;
-  width: 200px;
-  background-color: transparent;
-  z-index: 1;
-  position: absolute;
-}
-
-@keyframes tada {
-  0% {transform: scale(1);}
-  10%, 20% {transform: scale(0.9) rotate(-3deg);}
-  30%, 50%, 70%, 90% {transform: scale(1.1) rotate(3deg);}
-  40%, 60%, 80% {transform: scale(1.1) rotate(-3deg);}
-  100% {transform: scale(1) rotate(0);}
+``` Sass
+.intro {
+  z-index: +2; position: absolute;
+  margin: auto;
+  left: 0; top: 80px; right: 0;
+  max-width: 80%;
+  .intro-div {
+    display: flex-wrap;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    flex-direction: row;
+    padding: 100px;
+    height: 600px;
+    background-color:rgba(0,0,0, 0.9);
+    -webkit-box-shadow: 0px 0px 30px 14px rgba(255,255,255,1);
+    -moz-box-shadow: 0px 0px 30px 14px rgba(255,255,255,1);
+    box-shadow: 0px 0px 30px 14px rgba(255,255,255,1);
+    color: white;
+    font-size: 26px;
+    .winter {
+      color: #AA0000;
+      font-weight: bold;
+      cursor: pointer;
+      animation-delay: 1s;
+      -webkit-animation-duration: 2s;
+      animation-duration: 2s;
+    }
+  }
 }
 
 ```
@@ -138,12 +149,9 @@ ___
 
 ## Wins and Blockers
 
+A huge win was creating the game and CPU logic. It took great lengths to create concrete logic that wouldn't break after numerous tests and implement smart computer AI. I was also proud that I managed to achieve this with Vanilla Javascript (rather than relying on frameworks like jQuery). I am also proud of how the styling turned out and how professional it looks. People even mentioned that they thought it was an official game - which was a huge complement!
 
-A huge win was building the game itself, and really pushing the limits of what I had learnt so far, especially with more complex CSS3 and jQuery. I am also very happy with the amount of replay value I feel the game has.
-
-I think the biggest blocker was coming up with how I would keep track of all the various different stats and character data. There was so much important information the game needs to be able to run without encountering bugs that at first I was a bit lost with it all. Once I had come up with storing it into a series of useful objects I was then able to put those objects in to appropriate arrays and it became much simpler to know where each piece of data was stored.
-I think this project really cemented my core knowledge of JavaScript especially array methods because of this.
-
+The biggest blockers were defence placement logic and computer logic. I feel my code could be refactored greatly as some logic feels like it repeats itself. The challenge was that I didn't want to refactor if there was any chance of it breaking the entire code. However, I heavily refactored the ship placement code into numerous functions, all given very descriptive names, to help with readability. Going back to that code was a lot easier once this had been done. These challenges really cemented my knowledge of Javascript - particularly for and while loops and classes.
 ___
 
 ## Future Features
@@ -151,6 +159,6 @@ ___
 There was quite a lot of future features I intended to add to the game but couldn't due to the strict time constraints. If I had more time to work on the project I would add:
 
 * Further improve the animations and sounds of the game
-* I would really like to improve the mobile responsiveness
-* More variety in troop types, battle map or gameplay in general
-* Other game modes such as the Cooperative mode I started work towards
+* I would really like to improve the mobile and tablet responsiveness
+* Refactor the code to make it more readable
+* Other game modes such as human vs human player mode

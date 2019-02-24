@@ -9,8 +9,8 @@ body {
   -o-background-size: cover;
   background-size: cover;
   height: 100vh;
+  overflow-y: hidden;
   overflow-x: hidden;
-  overflow: hidden;
   font-family: 'Cinzel', serif;
 }
 
@@ -94,6 +94,11 @@ body {
   left: -280px;
   bottom: 0px;
   max-height: 380px;
+}
+
+.character-images {
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .instructions {
