@@ -85,6 +85,12 @@ body {
   bottom: 0;
   width: 100%; }
 
+.instructions-text {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  margin: 0 auto; }
+
 .axis {
   cursor: pointer; }
 
@@ -139,7 +145,7 @@ body {
       -webkit-animation-duration: 2s;
       animation-duration: 2s; }
 
-@media only screen and (max-width: 1076px), (max-height: 730px) {
+@media only screen and (max-width: 1023px), (max-height: 719px) {
   body {
     overflow: auto; }
 
@@ -153,6 +159,9 @@ body {
     position: relative; }
 
   .intro .intro-div {
-    font-size: 18px; } }
+    font-size: 18px; }
+
+  .instructions-text {
+    position: relative; } }
 
 /*# sourceMappingURL=style.css.map */
