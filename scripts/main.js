@@ -459,6 +459,7 @@ window.addEventListener('DOMContentLoaded', () => {
   function gameOver(playerType) {
     userInstructions.style.color = '#AA0000'
     compInstructions.style.color = '#AA0000'
+    instructionsText.style.color = '#AA0000'
     instructionsText.innerHTML = 'Play Again?'
     compInstructions.innerHTML = `${playerType.referenceName} Won!`
     userInstructions.innerHTML = `${playerType.referenceName} Won!`
