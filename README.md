@@ -102,7 +102,7 @@ function buildGrid(grid, player) {
 
 This is a screenshot of when I felt I had reached my minimum viable product as my game now met every requirement of the brief.
 
-![screenshot of mvp](screenshots/mvp.png)
+![screenshot of mvp](Screenshots/mvp.png)
 
 ### Styling
 
