@@ -34,7 +34,7 @@ Additional enhancements:
 * CSS3 (with animate.CSS)
 * Sass
 * Bulma
-* Felxbox
+* Flexbox
 * Vanilla JavaScript (ECMAScript6)
 * Git
 * GitHub
