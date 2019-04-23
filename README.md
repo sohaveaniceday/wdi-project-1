@@ -69,9 +69,9 @@ ___
 
 ### Functionality
 
-It was a 10x10 grid based game so I knew I had to create 2 blank arrays. Using a javascript loop and flexbox I created 100 divs for each array with the value of null.
+It was a 10x10 grid based game so I knew I had to create 2 blank arrays. Using a javaScript loop and flexbox I created 100 divs for each array with the value of null.
 
-Using Javascript classes for both the players and the ships allowed me to efficiently store key information (i.e. ship hp points, player's remaining ships etc.) that could be accessed easily throughout the code.
+Using JavaScript classes for both the players and the ships allowed me to efficiently store key information (i.e. ship hp points, player's remaining ships etc.) that could be accessed easily throughout the code.
 
 The next challenge was to allow both the human and CPU player to lay down their choices, abiding by the rules of Battleships - defences should stay within the game board and shouldn't be touching. Using various 'checker' functions for both horizontal and vertical placement, this allowed both players to lay down their defences without any logic conflicts.
 
