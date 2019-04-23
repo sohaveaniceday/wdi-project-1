@@ -2,8 +2,6 @@
 
 [Portfolio Link](https://www.richard-turner.com/wdi-project-1/)
 
-[GitHub Repo](https://github.com/sohaveaniceday/wdi-project-1)
-
 Battle of the Wall was my first project from General Assembly's Web Development Immersive course. It was an individual project built in just over a week, and was both my first game I had built and my first full project using Vanilla JavaScript, having only been studying it for two weeks.
 
 Battle of the Wall is a Game of Thrones-themed variation on the classic game Battleships, a one-player game against the computer where the player and CPU covertly lay out their defences on separate game boards. The players then takes it in turns to try and guess each other's defence squares. Once a player has destroyed all of their opponent's defences they have won the game.
