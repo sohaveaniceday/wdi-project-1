@@ -69,7 +69,7 @@ ___
 
 ### Functionality
 
-It was a 10x10 grid based game so I knew I had to create 2 blank arrays. Using a javaScript loop and flexbox I created 100 divs for each array with the value of null.
+It was a 10x10 grid based game so I knew I had to create 2 blank arrays. Using a JavaScript loop and flexbox I created 100 divs for each array with the value of null.
 
 Using JavaScript classes for both the players and the ships allowed me to efficiently store key information (i.e. ship hp points, player's remaining ships etc.) that could be accessed easily throughout the code.
 
