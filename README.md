@@ -43,23 +43,23 @@ Additional enhancements:
 
 ## Screenshot Walk-through
 
-### Intro page with story prelude
+### Intro page with story prelude.
 
 ![intro page](screenshots/intro-page.png)
 
-### This leads to a screen where the human player can lay down their defences
+### This leads to a screen where the human player can lay down their defences.
 
 ![game start](screenshots/game-start.png)
 
-### Once the human player has laid down their defences on the game board, play can commence
+### Once the human player has laid down their defences on the game board, play can commence.
 
 ![game setup](screenshots/game-setup.png)
 
-### Players then take it in turn to guess each other's defence squares. If they hit, they get another go
+### Players then take it in turn to guess each other's defence squares. If they hit, they get another go.
 
 ![game turns](screenshots/game-turns.png)
 
-### Once a player's has destroyed all their opponent's defences the game is over and the winner is displayed with the option to play again
+### Once a player's has destroyed all their opponent's defences the game is over and the winner is displayed with the option to play again.
 
 ![game over](screenshots/game-over.png)
 
