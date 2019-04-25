@@ -1,4 +1,4 @@
-# General Assembly WDI Project 1: Battle of the Wall
+# General Assembly WDI Project 1: The Game
 
 [Portfolio Link](https://www.richard-turner.com/wdi-project-1/)
 
