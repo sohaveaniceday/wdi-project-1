@@ -162,7 +162,7 @@ There was quite a lot of future features I intended to add to the game but could
 * Other game modes such as human vs human player mode
 ___
 
-## Biggest Learnings
+## Key Learnings
 
 Probably my biggest takeaway from this project was the importance or prioritisation and making sure key deliverables were worked on first before any bonus features. This meant that every day I would highlight the top 3 things I needed to work on, in order, and get those done before moving onto anything additional. This kept me on schedule to deliver the project in the timeframe provided.
 
