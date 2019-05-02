@@ -1,6 +1,6 @@
 # General Assembly WDI Project 1: The Game
 
-[Portfolio Link](https://www.richard-turner.com/wdi-project-1/)
+[Deployed Project Link](https://www.richard-turner.com/wdi-project-1/)
 
 Battle of the Wall was my first project from General Assembly's Web Development Immersive course. It was an individual project built in just over a week, and was both my first game I had built and my first full project using Vanilla JavaScript, having only been studying it for two weeks.
 
