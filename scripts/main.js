@@ -156,11 +156,12 @@ window.addEventListener('DOMContentLoaded', () => {
       userDirection = directionArray[1]
     }
     const userDiv = document.querySelectorAll('.user-div')
-    if (user.ships[currentShip].id === 'fort') {
+    if (currentShip && user.ships[currentShip].id === 'fort') {
       userDiv.forEach(div => div.style.cursor = `url('images/${user.ships[currentShip].id}-${userDirection}-cursor.png') 10 25, auto`)
-      console.log('fort')
-    } else {
+    } else if (currentShip) {
       userDiv.forEach(div => div.style.cursor = `url('images/${user.ships[currentShip].id}-${userDirection}.png') 10 25, auto`)
+    } else {
+      return
     }
   }
 
@@ -169,11 +170,12 @@ window.addEventListener('DOMContentLoaded', () => {
       currentShip = e.target.dataset.id
       instructionsText.innerHTML = `Place Your ${user.ships[currentShip].type}`
       const userDiv = document.querySelectorAll('.user-div')
-      if (user.ships[currentShip].id === 'fort') {
+      if (currentShip && user.ships[currentShip].id === 'fort') {
         userDiv.forEach(div => div.style.cursor = `url('images/${user.ships[currentShip].id}-${userDirection}-cursor.png') 10 25, auto`)
-        console.log('fort')
-      } else {
+      } else if (currentShip) {
         userDiv.forEach(div => div.style.cursor = `url('images/${user.ships[currentShip].id}-${userDirection}.png') 10 25, auto`)
+      } else {
+        return
       }
     }
   }
