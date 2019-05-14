@@ -491,6 +491,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const compActiveDiv = document.querySelectorAll('.comp-active-div')
     compActiveDiv.forEach(div => div.addEventListener('click', playerGuess))
   }
+  
   function playerGuess(e) {
     userInstructions.style.color = 'black'
     userInstructions.innerHTML = 'Waiting'
@@ -515,7 +516,6 @@ window.addEventListener('DOMContentLoaded', () => {
       instructionsText.innerHTML = 'Enemy\'s turn'
       compDiv[parseInt(e.target.dataset.id)].style.background = '#D3D3D3'
       setTimeout(computerGuess, 2000)
-      // instructions.addEventListener('click', computerGuess)
     }
   }
 
