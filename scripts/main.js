@@ -433,6 +433,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const compActiveDiv = document.querySelectorAll('.comp-active-div')
     compActiveDiv.forEach(div => div.addEventListener('click', playerGuess))
   }
+  
   function playerGuess(e) {
     userInstructions.style.color = 'black'
     userInstructions.innerHTML = 'Waiting'
