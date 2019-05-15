@@ -1,6 +1,6 @@
 window.addEventListener('DOMContentLoaded', () => {
 
-  //Declaring Global Variabkes
+  //Declaring Global Variables
 
   const newGridDiv = []
   const newShipDiv = []
@@ -25,7 +25,6 @@ window.addEventListener('DOMContentLoaded', () => {
   let huntingDirection = null
   let fixedHuntingDirection = null
 
-
   //Declaring Global DOM Variables
 
   const userGrid = document.querySelector('.user-grid')
@@ -37,7 +36,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const instructions = document.querySelector('.instructions')
   const compInstructions = document.querySelector('.comp-instructions')
 
-  //Contructors
+  //Constructors
 
   class Player {
     constructor(type, referenceName) {
@@ -119,6 +118,7 @@ window.addEventListener('DOMContentLoaded', () => {
     instructions.innerHTML = '<div class="instructions-text box title is-3 has-text-centered animated slideInUp">Choose Your Defence</div>'
     instructionsText = document.querySelector('.instructions-text')
   }
+
   // Build Grid and Ship Functions
 
   function buildGrid(grid, player) {
@@ -127,7 +127,6 @@ window.addEventListener('DOMContentLoaded', () => {
       newGridDiv[i].setAttribute('class', `${player.type}-div ${player.type}-active-div grid-div`)
       newGridDiv[i].setAttribute('id', `${player.type}-${i}`)
       newGridDiv[i].setAttribute('data-id', i)
-      // newGridDiv[i].innerHTML = [i]
       grid.appendChild(newGridDiv[i])
     }
     const userDiv = document.querySelectorAll('.user-div')
@@ -214,46 +213,21 @@ window.addEventListener('DOMContentLoaded', () => {
     playerType.ships[currentShip].position = []
   }
 
-  // function checkIfAlreadyOnMap(playerType) {
-  //   if (playerType.grid.indexOf(playerType.ships[currentShip]) !== -1) {
-  //     return true
-  //   }
-  // }
-  //
-  // function clearImageAlreadyOnMap(playerType) {
-  //   document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip])}`).innerHTML = `${playerType.grid.indexOf(playerType.ships[currentShip])}`
-  //   document.querySelector(`#${playerType.type}-${playerType.grid.indexOf(playerType.ships[currentShip])}`).removeAttribute('data-shipid')
-  // }
-  //
-  // function clearExistingArrayPosition(playerType) {
-  //   for (let i = 0; i < playerType.ships[currentShip].size; i++) {
-  //     playerType.grid[playerType.grid.indexOf(playerType.ships[currentShip])] = null
-  //     // playerType.grid.splice(playerType.grid.indexOf(playerType.ships[currentShip]), 1, null)
-  //   }
-  // }
-
   function addImageToGrid(e, playerType, position) {
     document.querySelector(`#${playerType.type}-${e}`).innerHTML = `<img id="image-${playerType.type}-${e}" src="images/${playerType.ships[currentShip].id}-${position}.png">`
     const userDiv = document.querySelectorAll('.user-div')
-    userDiv.forEach(div => div.style.cursor = "pointer")
+    userDiv.forEach(div => div.style.cursor = 'pointer')
     document.querySelector(`.user-${user.ships[currentShip].id}-div`).innerHTML = `<img src="images/${user.ships[currentShip].id}-horizontal-black.png">`
-    // const newImage = document.querySelector(`#image-${playerType.type}-${e}`)
-    // newImage.setAttribute('class', `${playerType.type}-div ${playerType.type}-active-div ship`)
-    // newImage.setAttribute('id', `image-${playerType.type}-${e}`)
-    // newImage.setAttribute('data-id', e)
-    // newImage.setAttribute('data-shipid', currentShip)
   }
 
   function addCompImageToGrid(e, playerType, position) {
     if (position === 'horizontal') {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i}`).setAttribute('data-shipid', currentShip)
       }
       playerType.ships[parseInt(currentShip)].axis = 'horizontal'
     } else {
       for (let i = 0; i < playerType.ships[currentShip].size; i++) {
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).style.background = 'black'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10}`).setAttribute('data-shipid', currentShip)
       }
       playerType.ships[parseInt(currentShip)].axis = 'vertical'
@@ -265,42 +239,34 @@ window.addEventListener('DOMContentLoaded', () => {
     if (parseInt(e) % 10 === 0) {
       playerType.grid[parseInt(e) + playerType.ships[currentShip].size] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + playerType.ships[currentShip].size)
-      // document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).setAttribute('data-occupiedid', currentShip)
     } else if ((parseInt(e) + playerType.ships[currentShip].size -1) % 10 === 9) {
       playerType.grid[parseInt(e) - 1] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) - 1)
-      // document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).setAttribute('data-occupiedid', currentShip)
     } else {
       playerType.grid[parseInt(e) - 1] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) - 1)
-      // document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) - 1}`).setAttribute('data-occupiedid', currentShip)
       playerType.grid[parseInt(e) + playerType.ships[currentShip].size] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + playerType.ships[currentShip].size)
-      // document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size}`).setAttribute('data-occupiedid', currentShip)
     }
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
       if (parseInt(e) < 10) {
         playerType.grid[parseInt(e) + i+10] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i + 10)
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).setAttribute('data-occupiedid', currentShip)
       } else if (parseInt(e) > 89) {
         playerType.grid[parseInt(e) + i-10] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i - 10)
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).setAttribute('data-occupiedid', currentShip)
       } else {
         playerType.grid[parseInt(e) + i+10] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i + 10)
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i+10}`).setAttribute('data-occupiedid', currentShip)
         playerType.grid[parseInt(e) + i-10] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i - 10)
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i-10}`).setAttribute('data-occupiedid', currentShip)
       }
       playerType.ships[currentShip].position.push(parseInt(e) + i)
@@ -310,46 +276,39 @@ window.addEventListener('DOMContentLoaded', () => {
     playerType.ships[parseInt(currentShip)].axis = 'horizontal'
   }
 
+
   function addVerticalArrayData(e, playerType) {
     if (parseInt(e) < 10) {
       playerType.grid[parseInt(e) + playerType.ships[currentShip].size * 10] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + playerType.ships[currentShip].size * 10)
-      // document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).setAttribute('data-occupiedid', currentShip)
     } else if (parseInt(e) + (playerType.ships[currentShip].size - 1) * 10 > 89) {
       playerType.grid[parseInt(e) - 1 * 10] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) - 1 * 10)
-      // document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).setAttribute('data-occupiedid', currentShip)
     } else {
       playerType.grid[parseInt(e) + playerType.ships[currentShip].size * 10] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + playerType.ships[currentShip].size * 10)
-      // document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) + playerType.ships[currentShip].size * 10}`).setAttribute('data-occupiedid', currentShip)
       playerType.grid[parseInt(e) - 1 * 10] = 'occupied'
       playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) - 1 * 10)
-      // document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).style.background = 'white'
       document.querySelector(`#${playerType.type}-${parseInt(e) - 1 * 10}`).setAttribute('data-occupiedid', currentShip)
     }
     for (let i = 0; i < playerType.ships[currentShip].size; i++) {
       if (parseInt(e) % 10 === 0) {
         playerType.grid[parseInt(e) + i * 10 + 1] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i * 10 + 1)
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).setAttribute('data-occupiedid', currentShip)
       } else if (parseInt(e) % 10 === 9) {
         playerType.grid[parseInt(e) + i * 10 - 1] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i * 10 - 1)
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).setAttribute('data-occupiedid', currentShip)
       } else {
         playerType.grid[parseInt(e) + i * 10 + 1] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i * 10 + 1)
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 + 1}`).setAttribute('data-occupiedid', currentShip)
         playerType.grid[parseInt(e) + i * 10 - 1] = 'occupied'
         playerType.ships[currentShip].occupiedSpaces.push(parseInt(e) + i * 10 - 1)
-        // document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).style.background = 'white'
         document.querySelector(`#${playerType.type}-${parseInt(e) + i * 10 - 1}`).setAttribute('data-occupiedid', currentShip)
       }
       playerType.ships[currentShip].position.push(parseInt(e) + i * 10)
@@ -358,29 +317,18 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
-
   // User Boat Selection Uber Function
 
   function positionSelection(e) {
     if (currentShip) {
       instructionsText.innerHTML = 'Choose Your Defence'
       if (checkAcceptableHorizontal(e.target.dataset.id, user, userDirection)) {
-        // clearCurrentObjectPositionArray(user)
-        // if (checkIfAlreadyOnMap(user)) {
-        //   clearImageAlreadyOnMap(user)
-        // }
         addImageToGrid(e.target.dataset.id, user, 'horizontal')
-        // clearExistingArrayPosition(user)
         addHoriztonalArrayData(e.target.dataset.id, user)
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else if (checkAcceptableVertical(e.target.dataset.id, user, userDirection)) {
         clearCurrentObjectPositionArray(user)
-        // if (checkIfAlreadyOnMap(user)) {
-        //   clearImageAlreadyOnMap(user)
-        // }
         addImageToGrid(e.target.dataset.id, user, 'vertical')
-        // clearExistingArrayPosition(user)
         addVerticalArrayData(e.target.dataset.id, user)
         document.querySelector(`.${user.ships[currentShip].id}-div`).removeEventListener('click', userSelection)
       } else {
@@ -393,8 +341,7 @@ window.addEventListener('DOMContentLoaded', () => {
     changeInstructions()
   }
 
-
-  // // Change Instructions Function
+  // Change Instructions Function
 
   function changeInstructions() {
     if (user.ships[0].position.length > 0 && user.ships[1].position.length > 0 && user.ships[2].position.length > 0 && user.ships[3].position.length > 0 && user.ships[4].position.length > 0) {
@@ -422,7 +369,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         while (checkAcceptableHorizontal(compGridPosition, comp, compDirection) === undefined)
         addHoriztonalArrayData(compGridPosition, comp)
-        // addImageToGrid(compGridPosition, comp, compDirection)
         addCompImageToGrid(compGridPosition, comp, 'horizontal')
       } else if (compDirection === 'vertical') {
         do {
@@ -430,16 +376,13 @@ window.addEventListener('DOMContentLoaded', () => {
         }
         while (checkAcceptableVertical(compGridPosition, comp, compDirection) === undefined)
         addVerticalArrayData(compGridPosition, comp, 'vertical')
-        // addImageToGrid(compGridPosition, comp, compDirection)
         addCompImageToGrid(compGridPosition, comp)
       }
     }
     currentShip = null
   }
 
-  // Game logic
-
-  //game logic functions
+  // Game logic 
 
   function shipDown(currentShip, playerType) {
     document.querySelector(`.${playerType.type}-${playerType.ships[currentShip].id}-div`).innerHTML = `<img src="images/${playerType.ships[currentShip].id}-horizontal-black.png">`
@@ -472,10 +415,9 @@ window.addEventListener('DOMContentLoaded', () => {
     playerType.ships[parseInt(e)].hp -= 1
     playerType.totalHp -= 1
     document.querySelector(`#${playerType.type}-${position}`).style.background = '#AA0000'
-    // document.querySelector(`#${playerType.type}-${position}`).innerHTML = `<img src="images/fire.png">`
   }
 
-  //Player logic
+  //Player logic 
 
   function playerTurn() {
     instructionsText.style.color = 'black'
@@ -515,7 +457,6 @@ window.addEventListener('DOMContentLoaded', () => {
       instructionsText.innerHTML = 'Enemy\'s turn'
       compDiv[parseInt(e.target.dataset.id)].style.background = '#D3D3D3'
       setTimeout(computerGuess, 2000)
-      // instructions.addEventListener('click', computerGuess)
     }
   }
 
@@ -624,5 +565,4 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setup()
   compSelection()
-
 })
